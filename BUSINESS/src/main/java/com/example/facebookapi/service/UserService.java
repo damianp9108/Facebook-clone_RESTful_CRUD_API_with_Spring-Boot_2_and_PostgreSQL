@@ -3,12 +3,9 @@ package com.example.facebookapi.service;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

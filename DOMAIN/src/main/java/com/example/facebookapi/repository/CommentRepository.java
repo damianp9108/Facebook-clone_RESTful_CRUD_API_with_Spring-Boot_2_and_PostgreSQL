@@ -12,10 +12,10 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends CassandraRepository<Comment, UUID> {
 
-
+    @AllowFiltering
     List<Comment> findAllByPostID(UUID postID);
 
-
+    @AllowFiltering
     List<Comment> findAllByUserID (UUID userID);
 
 }
