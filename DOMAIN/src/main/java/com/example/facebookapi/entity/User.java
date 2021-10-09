@@ -8,7 +8,9 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table("User")
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @PrimaryKey
-    private String userID;
+    private UUID userID;
 
     private String userName;
     private String userImage;
