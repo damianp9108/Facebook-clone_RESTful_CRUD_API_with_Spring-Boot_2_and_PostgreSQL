@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -22,30 +23,30 @@ public class PostController {
 
     @PostMapping ("/save")
     public ResponseEntity add(@RequestBody Post body) {
-        postService.submitPostToDB(body);
+        postService.savePost(body);
         return ResponseEntity.ok("Successfully saved");
     }
 
     @GetMapping("/getPost")
     public ResponseEntity retrieveAllPost(){
-        ArrayList<Post> result = postService.retrievePostFromDB();
+        List<Post> result = postService.getPosts();
         result.sort((e1, e2) -> e2.getDateTime().compareTo(e1.getDateTime()));
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/delete/{postId}")
-    public ArrayList<Post> deleteParticularPost(@PathVariable("postId") UUID postID){
-        ArrayList<Post> result = postService.deletePostFromDB(postID);
+    public List<Post> deleteParticularPost(@PathVariable("postId") UUID postID){
+        List<Post> result = postService.deletePost(postID);
         return result;
     }
 
     @GetMapping("/userPosts/{userID}")
-    public ArrayList<Post> getPostsOfUser (@PathVariable("userID") String userID){
-        return postService.particularUserPosts(userID);
+    public List<Post> getPostsOfUser (@PathVariable("userID") UUID userID){
+        return postService.getUserPosts(userID);
     }
 
     @DeleteMapping("/deleteUserPosts/{userID}")
-    public ArrayList<Post> deleteByUserID (@PathVariable("userID") String userID){
+    public List<Post> deleteByUserID (@PathVariable("userID") UUID userID){
         return postService.deleteUserPosts(userID);
     }
 }

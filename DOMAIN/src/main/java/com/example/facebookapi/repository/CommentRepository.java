@@ -6,22 +6,16 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface CommentRepository extends CassandraRepository<Comment, UUID> {
 
-    ArrayList<Comment> findAll();
 
-    @AllowFiltering
-    ArrayList<Comment> findAllByPostID(UUID postID);
-
-    ArrayList<Comment> deleteByCommentID(UUID commentID);
-
-    @AllowFiltering
-    ArrayList<Comment> findAllByUserID (String userID);
+    List<Comment> findAllByPostID(UUID postID);
 
 
-    void deleteAll();
+    List<Comment> findAllByUserID (UUID userID);
 
 }

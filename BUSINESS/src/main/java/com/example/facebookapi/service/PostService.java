@@ -4,56 +4,52 @@ import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
-    @Autowired
-    PostRepository postRepository;
-    @Autowired
-    CommentService commentService;
-    @Autowired
-    CommentRepository commentRepository;
+
+    private final PostRepository postRepository;
+    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
 
-    public void submitPostToDB(Post postData){
+    public Post savePost(Post post){
 
-        Date date = new Date();
-        long time = date.getTime();
-        Timestamp dateTime = new Timestamp(time);
+        LocalDateTime time = LocalDateTime.now();
 
-        postData.setPostID(UUID.randomUUID());
-        postData.setLikes(0);
-        postData.setDateTime(dateTime);
+        post.setPostID(UUID.randomUUID());
+        post.setLikes(0);
+        post.setDateTime(time);
 
-        postRepository.save(postData);
+        return postRepository.save(post);
     }
 
-    public ArrayList<Post> retrievePostFromDB(){
+    public List<Post> getPosts(){
         return postRepository.findAll();
     }
 
-    public ArrayList<Post> deletePostFromDB(UUID postID){
+    public List<Post> deletePost(UUID postID){
         postRepository.deleteById(postID);
 
         List<Comment> commentsToDelete = commentService.getAllComment(postID);
         commentRepository.deleteAll(commentsToDelete);
 
-        ArrayList<Post> result = retrievePostFromDB();
-        return result;
+
+        return getPosts();
     }
 
-    public ArrayList<Post> particularUserPosts (String userID){
+    public List<Post> getUserPosts (UUID userID){
         return postRepository.findAllByUserID(userID);
     }
 
-    public ArrayList<Post> deleteUserPosts (String userID){
-        ArrayList<Post> toDelete = postRepository.findAllByUserID(userID);
+    public List<Post> deleteUserPosts (UUID userID){
+        List<Post> toDelete = postRepository.findAllByUserID(userID);
 
         toDelete.forEach(post -> {
             List<Comment> commentsToDelete = commentService.getAllComment(post.getPostID());
@@ -62,6 +58,6 @@ public class PostService {
 
         postRepository.deleteAll(toDelete);
 
-        return retrievePostFromDB();
+        return getPosts();
     }
 }

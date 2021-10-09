@@ -4,8 +4,6 @@ import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,22 +26,22 @@ public class CommentController {
     }
 
     @GetMapping
-    public ArrayList<Comment> getAllComments(){
+    public List<Comment> getAllComments(){
         return commentService.getAllUsersComments();
     }
 
     @DeleteMapping("/{commentID}")
-    public ArrayList<Comment> deleteByCommentID(@PathVariable("commentID") UUID commentID){
+    public List<Comment> deleteByCommentID(@PathVariable("commentID") UUID commentID){
         return commentService.deleteComment(commentID);
     }
 
     @GetMapping("/userComments/{userID}")
-    public List<Comment> getCommentsOfUser (@PathVariable("userID") String userID){
-        return commentService.particularUserComments(userID);
+    public List<Comment> get (@PathVariable("userID") UUID userID){
+        return commentService.getUserComments(userID);
     }
 
     @DeleteMapping("/{userID}")
-    public ArrayList<Comment> deleteByUserID (@PathVariable("userID") String userID){
+    public List<Comment> deleteByUserID (@PathVariable("userID") UUID userID){
         return commentService.deleteUserComments(userID);
     }
 

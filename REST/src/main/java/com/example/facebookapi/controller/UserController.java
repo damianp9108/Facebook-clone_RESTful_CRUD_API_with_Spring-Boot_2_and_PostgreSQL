@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -17,22 +20,22 @@ public class UserController {
 
     @PostMapping("/save")
     public User saveUserMetaData(@RequestBody User user){
-        return userService.submitMetaDataOfUser(user);
+        return userService.saveUser(user);
     }
 
     @PutMapping("/changeActive/{userID}")
-        public User changeUserActive (@PathVariable("userID") String userID ){
-            return userService.changeUserActive(userID);
+        public User changeUserActive (@PathVariable("userID") UUID userID ){
+            return userService.changeActive(userID);
     }
 
     @GetMapping("/getUserDetails")
-    public ArrayList<User> getAllUserDetails(){
-        return userService.retrieveAllUserDetails();
+    public List<User> getAllUserDetails(){
+        return userService.getAllUsers();
     }
 
     @GetMapping("/getAllUsers/{userID}")
-    public User getUserDetail(@PathVariable("userID") String userID){
-        return userService.getUserData(userID);
+    public User getUserDetail(@PathVariable("userID") UUID userID){
+        return userService.getUser(userID);
     }
 
 }

@@ -3,14 +3,11 @@ package com.example.facebookapi.repository;
 import com.example.facebookapi.entity.User;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends CassandraRepository<User, String> {
+public interface UserRepository extends CassandraRepository<User, UUID> {
 
-    User save(User user);
-    ArrayList<User> findAll();
-    User findAllByUserID(String userID);
+    User findByUserID(UUID userID);
 
 }
