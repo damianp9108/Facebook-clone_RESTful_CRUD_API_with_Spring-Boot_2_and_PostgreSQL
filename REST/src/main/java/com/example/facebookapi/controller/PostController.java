@@ -2,11 +2,8 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

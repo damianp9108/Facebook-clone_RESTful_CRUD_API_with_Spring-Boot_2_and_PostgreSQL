@@ -4,8 +4,6 @@ import com.example.facebookapi.entity.Status;
 import com.example.facebookapi.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

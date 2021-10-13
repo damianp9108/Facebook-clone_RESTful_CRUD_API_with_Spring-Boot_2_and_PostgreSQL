@@ -4,10 +4,7 @@ import com.example.facebookapi.entity.User;
 import com.example.facebookapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
