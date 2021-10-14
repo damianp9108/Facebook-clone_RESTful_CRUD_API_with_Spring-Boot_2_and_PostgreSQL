@@ -2,46 +2,43 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.service.PostService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     @PostMapping ("/save")
-    public ResponseEntity add(@RequestBody Post body) {
-        postService.savePost(body);
-        return ResponseEntity.ok("Successfully saved");
+    public Post save(@RequestBody Post body) {
+        return postService.savePost(body);
     }
 
-    @GetMapping("/getPost")
-    public ResponseEntity retrieveAllPost(){
+    @GetMapping
+    public List<Post> get(){
         List<Post> result = postService.getPosts();
         result.sort((e1, e2) -> e2.getDateTime().compareTo(e1.getDateTime()));
-        return ResponseEntity.ok(result);
-    }
-
-    @DeleteMapping("/delete/{postId}")
-    public List<Post> deleteParticularPost(@PathVariable("postId") UUID postID){
-        List<Post> result = postService.deletePost(postID);
         return result;
     }
 
-    @GetMapping("/userPosts/{userID}")
-    public List<Post> getPostsOfUser (@PathVariable("userID") UUID userID){
+    @DeleteMapping("/{postId}")
+    public List<Post> delete(@PathVariable("postId") UUID postID){
+        return postService.deletePost(postID);
+
+    }
+
+    @GetMapping("/{userID}")
+    public List<Post> getByUserID (@PathVariable("userID") UUID userID){
         return postService.getUserPosts(userID);
     }
 
-    @DeleteMapping("/deleteUserPosts/{userID}")
+    @DeleteMapping("/byUser/{userID}")
     public List<Post> deleteByUserID (@PathVariable("userID") UUID userID){
         return postService.deleteUserPosts(userID);
     }

@@ -25,26 +25,26 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getAllComment(UUID postID){
+    public List<Comment> getCommentsByPostID(UUID postID){
         return commentRepository.findAllByPostID(postID);
     }
 
-    public List<Comment> getAllUsersComments(){
+    public List<Comment> getAllComments(){
         return commentRepository.findAll();
     }
 
     public List<Comment> deleteComment(UUID commentID){
         commentRepository.deleteById(commentID);
-        return getAllUsersComments();
+        return getAllComments();
     }
 
-    public List<Comment> getUserComments (UUID userID){
+    public List<Comment> getCommentsByUserID (UUID userID){
         return commentRepository.findAllByUserID(userID);
     }
 
-    public List<Comment> deleteUserComments (UUID userID){
+    public List<Comment> deleteCommentsByUserID (UUID userID){
         List<Comment> toDelete = commentRepository.findAllByUserID(userID);
         commentRepository.deleteAll(toDelete);
-        return getAllUsersComments();
+        return getAllComments();
     }
 }

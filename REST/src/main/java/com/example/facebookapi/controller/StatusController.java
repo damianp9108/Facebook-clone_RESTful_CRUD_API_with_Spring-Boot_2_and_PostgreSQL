@@ -2,24 +2,25 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.Status;
 import com.example.facebookapi.service.StatusService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/statusService")
+@RequiredArgsConstructor
+@RequestMapping("/statuses")
 public class StatusController {
 
-    @Autowired
-    StatusService statusService;
+    private final StatusService statusService;
+
 
     @PostMapping("/save")
-    public Status saveStatus(@RequestBody Status status){
+    public Status save(@RequestBody Status status){
         return statusService.saveStatus(status);
     }
 
-    @GetMapping("/getAllStatus")
-    public List<Status> getAllStatus(){
+    @GetMapping
+    public List<Status> get(){
         return statusService.getAllStatus();
     }
 

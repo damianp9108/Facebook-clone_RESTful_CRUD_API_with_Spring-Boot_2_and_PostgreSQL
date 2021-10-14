@@ -2,35 +2,36 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/userService")
+@RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
 
     @PostMapping("/save")
-    public User saveUserMetaData(@RequestBody User user){
+    public User save(@RequestBody User user){
         return userService.saveUser(user);
     }
 
-    @PutMapping("/changeActive/{userID}")
-        public User changeUserActive (@PathVariable("userID") UUID userID ){
+    @PutMapping("/update/{userID}")
+        public User update (@PathVariable("userID") UUID userID ){
             return userService.changeActive(userID);
     }
 
-    @GetMapping("/getUserDetails")
-    public List<User> getAllUserDetails(){
+    @GetMapping
+    public List<User> get(){
         return userService.getAllUsers();
     }
 
-    @GetMapping("/getAllUsers/{userID}")
-    public User getUserDetail(@PathVariable("userID") UUID userID){
+    @GetMapping("/{userID}")
+    public User getByUserID(@PathVariable("userID") UUID userID){
         return userService.getUser(userID);
     }
 

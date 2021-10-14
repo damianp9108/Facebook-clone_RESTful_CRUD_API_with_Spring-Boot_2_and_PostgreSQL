@@ -35,11 +35,10 @@ public class PostService {
     }
 
     public List<Post> deletePost(UUID postID){
-        postRepository.deleteById(postID);
 
-        List<Comment> commentsToDelete = commentService.getAllComment(postID);
+        List<Comment> commentsToDelete = commentService.getCommentsByPostID(postID);
         commentRepository.deleteAll(commentsToDelete);
-
+        postRepository.deleteById(postID);
 
         return getPosts();
     }
@@ -52,7 +51,7 @@ public class PostService {
         List<Post> toDelete = postRepository.findAllByUserID(userID);
 
         toDelete.forEach(post -> {
-            List<Comment> commentsToDelete = commentService.getAllComment(post.getPostID());
+            List<Comment> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
             commentRepository.deleteAll(commentsToDelete);
         });
 

@@ -6,7 +6,6 @@
     <modules>
         <module>DOMAIN</module>
         <module>BUSINESS</module>
-        <module>COMMONS</module>
         <module>REST</module>
     </modules>
 
