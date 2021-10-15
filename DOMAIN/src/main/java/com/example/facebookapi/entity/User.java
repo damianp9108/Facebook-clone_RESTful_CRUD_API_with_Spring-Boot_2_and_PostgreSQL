@@ -23,6 +23,7 @@ public class User {
     private UUID userID;
 
     private String userName;
+    private String password;
     private String userImage;
     private boolean active;
     private LocalDateTime joiningDate;
