@@ -4,6 +4,8 @@ import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +18,12 @@ public class CommentController {
 
 
     @PostMapping("/save")
-    public Comment save(@RequestBody Comment comment){
+    public Comment save(@RequestBody @Valid Comment comment){
         return commentService.saveComment(comment);
     }
 
     @GetMapping("/{postID}")
-    public List<Comment> getByPostID(@PathVariable("postID") UUID postID){
+    public List<Comment> getByPostID(@PathVariable ("postID") UUID postID){
         return commentService.getCommentsByPostID(postID);
     }
 

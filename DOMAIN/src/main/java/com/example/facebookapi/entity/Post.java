@@ -8,7 +8,11 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -22,13 +26,14 @@ public class Post {
     @PrimaryKey
     private UUID postID;
 
+    @NotNull(message = "prosze podac ID uzytkownika")
     private UUID userID;
+
     private String userName;
+
     private String imageURL;
-
-    private String description;
-    private String postImgURL;
-
+    public String description;
+    public String postImgURL;
     private int likes;
     private LocalDateTime dateTime;
 

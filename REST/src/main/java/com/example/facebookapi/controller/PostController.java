@@ -2,8 +2,11 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.service.PostService;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +19,7 @@ public class PostController {
 
 
     @PostMapping ("/save")
-    public Post save(@RequestBody Post body) {
+    public Post save(@RequestBody @Valid Post body) {
         return postService.savePost(body);
     }
 

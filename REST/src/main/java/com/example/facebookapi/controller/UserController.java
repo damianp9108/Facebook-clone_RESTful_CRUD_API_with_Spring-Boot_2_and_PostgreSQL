@@ -1,28 +1,28 @@
 package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.User;
-import com.example.facebookapi.exceptions.RecordAlreadyExistsException;
-import com.example.facebookapi.repository.UserRepository;
 import com.example.facebookapi.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @PostMapping("/save")
-    public User save(@RequestBody User user) {
-        return userService.saveUser(user);
+    public User save(@RequestBody @Valid User user) {
+         return userService.saveUser(user);
+
     }
 
     @PutMapping("/update/{userID}")
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Optional<User> login(@RequestParam("username") String userName, @RequestParam("password") String password){
+    public User login(@RequestParam("username") @NotBlank(message = "nie podano nazwy uzytkownika") String userName, @RequestParam("password") @NotBlank(message = "haslo jest wymagane") String password){
         return userService.login(userName, password);
     }
 

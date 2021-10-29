@@ -2,7 +2,8 @@ package com.example.facebookapi.service;
 
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.LoginErrorException;
-import com.example.facebookapi.exceptions.RecordAlreadyExistsException;
+import com.example.facebookapi.exceptions.UserAlreadyExistsException;
+import com.example.facebookapi.exceptions.UserNotExist;
 import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
 
-
     private final UserRepository userRepository;
+
 
     public User saveUser(User user)  {
         Optional<User> userFromDB = userRepository.findByUserName(user.getUserName());
         if (userFromDB.isPresent()) {
-            throw new RecordAlreadyExistsException(user.getUserName());
+            throw new UserAlreadyExistsException(user.getUserName());
         }
 
             LocalDateTime dateTime = LocalDateTime.now();
@@ -39,7 +40,12 @@ public class UserService {
     }
 
     public User getUser(UUID userID) {
-        return userRepository.findByUserID(userID);
+        Optional<User> userFromDB = userRepository.findByUserID(userID);
+        if (userFromDB.isEmpty()) {
+            throw new UserNotExist(userID);
+        }
+        return userFromDB.get();
+
     }
 
     public User changeActive(UUID userID) {
@@ -52,18 +58,18 @@ public class UserService {
     }
 
 
-    public Optional<User> login(String userName, String password){
+    public User login(String userName, String password){
         Optional<User> userFromDb = userRepository.findByUserName(userName);
 
-        if(userFromDb.isEmpty() || wrongPassword(userFromDb, password)){
+        if(userFromDb.isEmpty() || wrongPassword(userFromDb.get(), password)){
             throw new LoginErrorException();
         }
 
-        return userFromDb;
+        return userFromDb.get();
     }
 
-    public boolean wrongPassword(Optional<User>userFromDb, String password) {
-        return !userFromDb.get().getPassword().equals(password);
+    public boolean wrongPassword(User user, String password) {
+        return !user.getPassword().equals(password);
     }
 
 }
