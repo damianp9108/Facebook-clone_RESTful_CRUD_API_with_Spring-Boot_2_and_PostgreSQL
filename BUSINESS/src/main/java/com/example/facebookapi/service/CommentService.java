@@ -5,13 +5,10 @@ import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.CommentNotExist;
 import com.example.facebookapi.exceptions.PostNotExist;
-import com.example.facebookapi.exceptions.UserNotExist;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
-import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

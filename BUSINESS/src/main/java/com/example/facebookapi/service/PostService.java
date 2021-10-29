@@ -9,12 +9,8 @@ import com.example.facebookapi.exceptions.UserNotExist;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
 import com.example.facebookapi.repository.UserRepository;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.*;
 
