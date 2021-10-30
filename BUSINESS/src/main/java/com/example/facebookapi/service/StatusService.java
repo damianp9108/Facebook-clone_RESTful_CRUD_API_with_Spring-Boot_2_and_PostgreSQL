@@ -14,9 +14,10 @@ public class StatusService {
 
 
      private final StatusRepository statusRepository;
+     private final UserService userService;
 
     public Status saveStatus(Status status){
-
+        userService.getUser(status.getUserID());
         LocalDateTime time = LocalDateTime.now();
 
         status.setStatusID(UUID.randomUUID());

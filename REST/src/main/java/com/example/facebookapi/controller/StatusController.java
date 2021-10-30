@@ -4,6 +4,8 @@ import com.example.facebookapi.entity.Status;
 import com.example.facebookapi.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,7 +17,7 @@ public class StatusController {
 
 
     @PostMapping("/save")
-    public Status save(@RequestBody Status status){
+    public Status save(@RequestBody @Valid Status status){
         return statusService.saveStatus(status);
     }
 

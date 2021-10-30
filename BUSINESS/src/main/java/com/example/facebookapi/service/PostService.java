@@ -34,7 +34,7 @@ public class PostService {
 
 
         LocalDateTime time = LocalDateTime.now();
-       // post.setUserName(checkedUser.getUserName());
+
         post.setPostID(UUID.randomUUID());
         post.setLikes(0);
         post.setDateTime(time);
