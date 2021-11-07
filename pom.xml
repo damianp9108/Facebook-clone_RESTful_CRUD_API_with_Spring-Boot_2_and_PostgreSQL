@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>16</java.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -66,12 +67,22 @@
                 <artifactId>hibernate-validator</artifactId>
                 <version>6.1.5.Final</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
         </dependencies>
 
     <build>
@@ -93,6 +104,7 @@
                     <target>16</target>
                     <fork>true</fork>
                     <executable>C:\Program Files\Java\jdk-16.0.1\bin\javac</executable>
+
                 </configuration>
             </plugin>
         </plugins>

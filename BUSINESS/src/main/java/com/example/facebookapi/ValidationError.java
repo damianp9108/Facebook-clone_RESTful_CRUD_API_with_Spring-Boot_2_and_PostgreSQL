@@ -1,10 +1,8 @@
 package com.example.facebookapi;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ValidationError {
     private String fieldName;
     private String message;

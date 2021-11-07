@@ -1,5 +1,6 @@
 package com.example.facebookapi.service;
 
+import com.example.facebookapi.dto.UserDto;
 import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.entity.User;
@@ -37,7 +38,7 @@ public class CommentService {
     }
 
     public Comment saveComment(Comment comment){
-        User checkedUser = userService.getUser(comment.getUserID());
+        UserDto checkedUser = userService.getUser(comment.getUserID());
         checkPost(comment.getPostID());
 
         LocalDateTime dateTime = LocalDateTime.now();

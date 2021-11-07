@@ -1,13 +1,11 @@
 package com.example.facebookapi;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ValidationErrorResponse {
     private List<ValidationError> errors = new ArrayList<>();
 

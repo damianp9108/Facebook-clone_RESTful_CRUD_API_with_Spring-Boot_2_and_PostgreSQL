@@ -1,9 +1,11 @@
 package com.example.facebookapi.service;
 
+import com.example.facebookapi.dto.UserDto;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.LoginErrorException;
 import com.example.facebookapi.exceptions.UserAlreadyExistsException;
 import com.example.facebookapi.exceptions.UserNotExist;
+import com.example.facebookapi.mappers.UserMapper;
 import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,10 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 
-    public User saveUser(User user)  {
+    public UserDto saveUser(User user)  {
         Optional<User> userFromDB = userRepository.findByUserName(user.getUserName());
         if (userFromDB.isPresent()) {
             throw new UserAlreadyExistsException(user.getUserName());
@@ -30,40 +33,44 @@ public class UserService {
             user.setActive(false);
             user.setJoiningDate(dateTime);
 
-            return userRepository.save(user);
+            userRepository.save(user);
+
+            return userMapper.toUserDto(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return userMapper.toUserDtos(users);
     }
 
-    public User getUser(UUID userID) {
-        Optional<User> userFromDB = userRepository.findByUserID(userID);
+    public UserDto getUser(UUID userID) {
+        Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);
         }
-        return userFromDB.get();
+        return userMapper.toUserDto(userFromDB.get());
 
     }
 
-    public User changeActive(UUID userID) {
-        User userToChangeActive = getUser(userID);
-        boolean activity = userToChangeActive.isActive();
-        userToChangeActive.setActive(!activity);
+    public String changeActive(UUID userID) {
+        Optional<User> userToChangeActive = userRepository.findById(userID);
+        boolean activity = userToChangeActive.get().isActive();
+        userToChangeActive.get().setActive(!activity);
 
-        return userRepository.save(userToChangeActive);
+        userRepository.save(userToChangeActive.get());
+        return "active: " + userToChangeActive.get().isActive();
 
     }
 
 
-    public User login(String userName, String password){
+    public UserDto login(String userName, String password){
         Optional<User> userFromDb = userRepository.findByUserName(userName);
 
         if(userFromDb.isEmpty() || wrongPassword(userFromDb.get(), password)){
             throw new LoginErrorException();
         }
 
-        return userFromDb.get();
+        return userMapper.toUserDto(userFromDb.get());
     }
 
     public boolean wrongPassword(User user, String password) {

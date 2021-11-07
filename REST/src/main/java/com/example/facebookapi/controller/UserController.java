@@ -1,8 +1,10 @@
 package com.example.facebookapi.controller;
 
+import com.example.facebookapi.dto.UserDto;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,28 +22,30 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/save")
-    public User save(@RequestBody @Valid User user) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto save(@RequestBody @Valid User user) {
          return userService.saveUser(user);
 
     }
 
     @PutMapping("/update/{userID}")
-    public User update(@PathVariable("userID") UUID userID) {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public String update(@PathVariable("userID") UUID userID) {
         return userService.changeActive(userID);
     }
 
     @GetMapping
-    public List<User> get() {
+    public List<UserDto> get() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userID}")
-    public User getByUserID(@PathVariable("userID") UUID userID) {
+    public UserDto getByUserID(@PathVariable("userID") UUID userID) {
         return userService.getUser(userID);
     }
 
     @PostMapping("/login")
-    public User login(@RequestParam("username") @NotBlank(message = "nie podano nazwy uzytkownika") String userName, @RequestParam("password") @NotBlank(message = "haslo jest wymagane") String password){
+    public UserDto login(@RequestParam("username") @NotBlank(message = "nie podano nazwy uzytkownika") String userName, @RequestParam("password") @NotBlank(message = "haslo jest wymagane") String password){
         return userService.login(userName, password);
     }
 

@@ -62,7 +62,7 @@ public class PostService {
     }
 
     public List<Post> getUserPosts (UUID userID){
-        Optional<User> userFromDB = userRepository.findByUserID(userID);
+        Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);
         }

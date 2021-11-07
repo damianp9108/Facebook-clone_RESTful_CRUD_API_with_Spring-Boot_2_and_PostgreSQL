@@ -2,7 +2,6 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.service.PostService;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
