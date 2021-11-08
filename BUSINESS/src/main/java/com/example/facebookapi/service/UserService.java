@@ -1,5 +1,6 @@
 package com.example.facebookapi.service;
 
+import com.example.facebookapi.dto.SignUpDto;
 import com.example.facebookapi.dto.UserDto;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.LoginErrorException;
@@ -22,20 +23,21 @@ public class UserService {
     private final UserMapper userMapper;
 
 
-    public UserDto saveUser(User user)  {
-        Optional<User> userFromDB = userRepository.findByUserName(user.getUserName());
+    public UserDto saveUser(SignUpDto userDto)  {
+        Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
         if (userFromDB.isPresent()) {
-            throw new UserAlreadyExistsException(user.getUserName());
+            throw new UserAlreadyExistsException(userDto.getUserName());
         }
 
-            LocalDateTime dateTime = LocalDateTime.now();
-            user.setUserID(UUID.randomUUID());
-            user.setActive(false);
-            user.setJoiningDate(dateTime);
+        LocalDateTime dateTime = LocalDateTime.now();
+        User newUser = userMapper.dtoToUser(userDto);
+            newUser.setUserID(UUID.randomUUID());
+            newUser.setActive(false);
+            newUser.setJoiningDate(dateTime);
 
-            userRepository.save(user);
+            userRepository.save(newUser);
 
-            return userMapper.toUserDto(user);
+            return userMapper.toUserDto(newUser);
     }
 
     public List<UserDto> getAllUsers() {
@@ -63,10 +65,10 @@ public class UserService {
     }
 
 
-    public UserDto login(String userName, String password){
-        Optional<User> userFromDb = userRepository.findByUserName(userName);
+    public UserDto login(SignUpDto userDto){
+        Optional<User> userFromDb = userRepository.findByUserName(userDto.getUserName());
 
-        if(userFromDb.isEmpty() || wrongPassword(userFromDb.get(), password)){
+        if(userFromDb.isEmpty() || wrongPassword(userFromDb.get(), userDto.getPassword())){
             throw new LoginErrorException();
         }
 

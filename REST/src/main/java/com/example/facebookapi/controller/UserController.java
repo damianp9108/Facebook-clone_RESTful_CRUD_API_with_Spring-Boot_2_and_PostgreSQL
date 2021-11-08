@@ -1,20 +1,17 @@
 package com.example.facebookapi.controller;
 
+import com.example.facebookapi.dto.SignUpDto;
 import com.example.facebookapi.dto.UserDto;
-import com.example.facebookapi.entity.User;
 import com.example.facebookapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Validated
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
@@ -23,8 +20,8 @@ public class UserController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto save(@RequestBody @Valid User user) {
-         return userService.saveUser(user);
+    public UserDto save(@RequestBody @Valid SignUpDto userDto) {
+         return userService.saveUser(userDto);
 
     }
 
@@ -45,8 +42,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDto login(@RequestParam("username") @NotBlank(message = "nie podano nazwy uzytkownika") String userName, @RequestParam("password") @NotBlank(message = "haslo jest wymagane") String password){
-        return userService.login(userName, password);
+    public UserDto login(@RequestBody @Valid SignUpDto userDto){
+        return userService.login(userDto);
     }
 
 }

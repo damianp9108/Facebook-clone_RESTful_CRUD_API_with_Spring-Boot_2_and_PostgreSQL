@@ -34,6 +34,12 @@ public class ErrorHandler {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(UsernameNotExist.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String usernameNotExistHandler(UsernameNotExist ex){
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(InvalidFormatException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ValidationErrorResponse invalidFormatExceptionHandler(InvalidFormatException ex) {

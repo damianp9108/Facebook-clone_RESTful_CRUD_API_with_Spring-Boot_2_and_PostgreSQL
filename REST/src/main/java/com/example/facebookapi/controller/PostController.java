@@ -1,6 +1,6 @@
 package com.example.facebookapi.controller;
 
-import com.example.facebookapi.entity.Post;
+import com.example.facebookapi.dto.PostDto;
 import com.example.facebookapi.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,30 +18,30 @@ public class PostController {
 
 
     @PostMapping ("/save")
-    public Post save(@RequestBody @Valid Post body) {
-        return postService.savePost(body);
+    public PostDto save(@RequestBody @Valid PostDto postDto) {
+        return postService.savePost(postDto);
     }
 
     @GetMapping
-    public List<Post> get(){
-        List<Post> result = postService.getPosts();
+    public List<PostDto> get(){
+        List<PostDto> result = postService.getPosts();
         result.sort((e1, e2) -> e2.getDateTime().compareTo(e1.getDateTime()));
         return result;
     }
 
     @DeleteMapping("/{postId}")
-    public List<Post> delete(@PathVariable("postId") UUID postID){
+    public List<PostDto> delete(@PathVariable("postId") UUID postID){
         return postService.deletePost(postID);
 
     }
 
     @GetMapping("/{userID}")
-    public List<Post> getByUserID (@PathVariable("userID") UUID userID){
+    public List<PostDto> getByUserID (@PathVariable("userID") UUID userID){
         return postService.getUserPosts(userID);
     }
 
     @DeleteMapping("/byUser/{userID}")
-    public List<Post> deleteByUserID (@PathVariable("userID") UUID userID){
+    public List<PostDto> deleteByUserID (@PathVariable("userID") UUID userID){
         return postService.deleteUserPosts(userID);
     }
 }

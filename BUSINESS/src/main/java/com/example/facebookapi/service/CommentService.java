@@ -3,7 +3,6 @@ package com.example.facebookapi.service;
 import com.example.facebookapi.dto.UserDto;
 import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
-import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.CommentNotExist;
 import com.example.facebookapi.exceptions.PostNotExist;
 import com.example.facebookapi.repository.CommentRepository;

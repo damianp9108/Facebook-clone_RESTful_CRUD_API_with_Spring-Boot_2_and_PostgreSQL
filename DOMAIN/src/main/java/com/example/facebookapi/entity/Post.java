@@ -18,10 +18,7 @@ public class Post {
 
     @PrimaryKey
     private UUID postID;
-
-    @NotNull(message = "prosze podac ID uzytkownika")
     private UUID userID;
-
     private String userName;
 
     private String imageURL;
