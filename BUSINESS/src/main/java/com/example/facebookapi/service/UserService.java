@@ -58,7 +58,6 @@ public class UserService {
         Optional<User> userToChangeActive = userRepository.findById(userID);
         boolean activity = userToChangeActive.get().isActive();
         userToChangeActive.get().setActive(!activity);
-
         userRepository.save(userToChangeActive.get());
         return "active: " + userToChangeActive.get().isActive();
 

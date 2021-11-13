@@ -1,5 +1,6 @@
 package com.example.facebookapi.service;
 
+import com.example.facebookapi.dto.CommentDto;
 import com.example.facebookapi.dto.PostDto;
 import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
@@ -8,6 +9,7 @@ import com.example.facebookapi.exceptions.PostException;
 import com.example.facebookapi.exceptions.PostNotExist;
 import com.example.facebookapi.exceptions.UserNotExist;
 import com.example.facebookapi.exceptions.UsernameNotExist;
+import com.example.facebookapi.mappers.CommentMapper;
 import com.example.facebookapi.mappers.PostMapper;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
@@ -26,6 +28,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 
 
         public PostDto savePost (PostDto postDto) {
@@ -66,8 +69,9 @@ public class PostService {
             throw new PostNotExist(postID);
         }
 
-        List<Comment> commentsToDelete = commentService.getCommentsByPostID(postID);
-        commentRepository.deleteAll(commentsToDelete);
+        List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(postID);
+        List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
+        commentRepository.deleteAll(comments);
         postRepository.deleteById(postID);
 
         return getPosts();
@@ -92,9 +96,10 @@ public class PostService {
         List<Post> userPosts = postRepository.findAllByUserID(userID);
 
         userPosts.forEach(post -> {
-            List<Comment> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
+            List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
+            List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
 
-            commentRepository.deleteAll(commentsToDelete);
+            commentRepository.deleteAll(comments);
             postRepository.delete(post);
         });
 

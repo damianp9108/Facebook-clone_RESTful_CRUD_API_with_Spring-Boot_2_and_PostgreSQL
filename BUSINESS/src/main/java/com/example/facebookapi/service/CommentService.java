@@ -1,12 +1,16 @@
 package com.example.facebookapi.service;
 
-import com.example.facebookapi.dto.UserDto;
+import com.example.facebookapi.dto.CommentDto;
 import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
+import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.CommentNotExist;
 import com.example.facebookapi.exceptions.PostNotExist;
+import com.example.facebookapi.exceptions.UsernameNotExist;
+import com.example.facebookapi.mappers.CommentMapper;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
+import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -21,6 +25,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final CommentMapper commentMapper;
 
     public void checkPost(UUID postID){
         Optional<Post> post = postRepository.findById(postID);
@@ -36,39 +42,52 @@ public class CommentService {
         }
     }
 
-    public Comment saveComment(Comment comment){
-        UserDto checkedUser = userService.getUser(comment.getUserID());
-        checkPost(comment.getPostID());
+    public CommentDto saveComment(CommentDto commentDto){
+        Optional<User> user = userRepository.findByUserName(commentDto.getUserName());
+        if (user.isEmpty()){
+            throw new UsernameNotExist(commentDto.getUserName());
+        }
+        checkPost(commentDto.getPostID());
+
+        Comment comment = commentMapper.dtoToComment(commentDto);
 
         LocalDateTime dateTime = LocalDateTime.now();
-        comment.setUserName(checkedUser.getUserName());
         comment.setCommentID(UUID.randomUUID());
+        comment.setUserID(user.get().getUserID());
+        comment.setUserImage(user.get().getUserImage());
         comment.setTime(dateTime);
 
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
+
+        return commentMapper.toCommentDto(comment);
     }
 
-    public List<Comment> getCommentsByPostID(UUID postID){
+    public List<CommentDto> getCommentsByPostID(UUID postID){
         checkPost(postID);
-        return commentRepository.findAllByPostID(postID);
+        List<Comment> comments = commentRepository.findAllByPostID(postID);
+        return commentMapper.toCommentDtos(comments);
     }
 
-    public List<Comment> getAllComments(){
-        return commentRepository.findAll();
+    public List<CommentDto> getAllComments(){
+        List<Comment> comments = commentRepository.findAll();
+        List<CommentDto> commentDtos = commentMapper.toCommentDtos(comments);
+        return commentDtos;
     }
 
-    public List<Comment> deleteComment(UUID commentID){
+    public List<CommentDto> deleteComment(UUID commentID){
         checkComment(commentID);
         commentRepository.deleteById(commentID);
         return getAllComments();
     }
 
-    public List<Comment> getCommentsByUserID (UUID userID){
+    public List<CommentDto> getCommentsByUserID (UUID userID){
         userService.getUser(userID);
-        return commentRepository.findAllByUserID(userID);
+        List<Comment> userComments = commentRepository.findAllByUserID(userID);
+        List<CommentDto> commentDtos = commentMapper.toCommentDtos(userComments);
+        return commentDtos;
     }
 
-    public List<Comment> deleteCommentsByUserID (UUID userID){
+    public List<CommentDto> deleteCommentsByUserID (UUID userID){
         userService.getUser(userID);
         List<Comment> toDelete = commentRepository.findAllByUserID(userID);
         commentRepository.deleteAll(toDelete);

@@ -20,9 +20,7 @@ public class Comment {
 
     @PrimaryKey
     private UUID commentID;
-    @NotNull
     private UUID postID;
-    @NotNull
     private UUID userID;
     private String userImage;
     private String userName;

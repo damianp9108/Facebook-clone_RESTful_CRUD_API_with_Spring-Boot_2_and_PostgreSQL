@@ -1,11 +1,17 @@
 package com.example.facebookapi.service;
 
+import com.example.facebookapi.dto.StatusDto;
 import com.example.facebookapi.entity.Status;
+import com.example.facebookapi.entity.User;
+import com.example.facebookapi.exceptions.UsernameNotExist;
+import com.example.facebookapi.mappers.StatusMapper;
 import com.example.facebookapi.repository.StatusRepository;
+import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -14,18 +20,27 @@ public class StatusService {
 
 
      private final StatusRepository statusRepository;
-     private final UserService userService;
+     private final UserRepository userRepository;
+     private final StatusMapper statusMapper;
 
-    public Status saveStatus(Status status){
-        userService.getUser(status.getUserID());
+    public StatusDto saveStatus(StatusDto statusDto){
+        Optional<User> userFromDB = userRepository.findByUserName(statusDto.getUserName());
+        if (userFromDB.isEmpty()){
+            throw new UsernameNotExist(statusDto.getUserName());
+        }
+
         LocalDateTime time = LocalDateTime.now();
+        Status newStatus = statusMapper.dtoToStatus(statusDto);
+        newStatus.setStatusID(UUID.randomUUID());
+        newStatus.setUserID(userFromDB.get().getUserID());
+        newStatus.setUploadTime(time);
+        statusRepository.save(newStatus);
 
-        status.setStatusID(UUID.randomUUID());
-        status.setUploadTime(time);
-        return statusRepository.save(status);
+        return statusMapper.toStatusDto(newStatus);
     }
 
-    public List<Status> getAllStatus(){
-        return statusRepository.findAll();
+    public List<StatusDto> getAllStatus(){
+        List<Status> statuses = statusRepository.findAll();
+        return statusMapper.toStatusDtos(statuses);
     }
 }

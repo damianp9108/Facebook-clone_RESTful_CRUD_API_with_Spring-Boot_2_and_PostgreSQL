@@ -1,6 +1,6 @@
 package com.example.facebookapi.controller;
 
-import com.example.facebookapi.entity.Status;
+import com.example.facebookapi.dto.StatusDto;
 import com.example.facebookapi.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +17,13 @@ public class StatusController {
 
 
     @PostMapping("/save")
-    public Status save(@RequestBody @Valid Status status){
-        return statusService.saveStatus(status);
+    public StatusDto save(@RequestBody @Valid StatusDto statusDto){
+        return statusService.saveStatus(statusDto);
     }
 
     @GetMapping
-    public List<Status> get(){
+    public List<StatusDto> get(){
         return statusService.getAllStatus();
     }
-
 
 }
