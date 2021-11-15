@@ -1,25 +1,33 @@
 package com.example.facebookapi.entity;
 
 import lombok.*;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Table("User")
+@Table(name = "Users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
-    @PrimaryKey
-    private UUID userID;
+    @Id
+    @GeneratedValue
+    private int userID;
+
+    @Column(name = "userName")
     private String userName;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "userImage")
     private String userImage;
+
+    @Column(name = "active")
     private boolean active;
+
+    @Column(name = "joiningDate")
     private LocalDateTime joiningDate;
 
 }

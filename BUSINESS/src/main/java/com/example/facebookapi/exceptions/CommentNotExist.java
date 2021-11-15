@@ -1,9 +1,8 @@
 package com.example.facebookapi.exceptions;
 
-import java.util.UUID;
 
 public class CommentNotExist extends RuntimeException{
-    public CommentNotExist(UUID commentID) {
+    public CommentNotExist(int commentID) {
         super("Komentarz o podanym ID: " + commentID + " nie istnieje");
     }
 }

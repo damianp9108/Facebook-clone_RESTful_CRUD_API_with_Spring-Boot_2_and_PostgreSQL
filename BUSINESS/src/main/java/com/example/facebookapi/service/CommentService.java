@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +27,14 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
-    public void checkPost(UUID postID){
+    public void checkPost(int postID){
         Optional<Post> post = postRepository.findById(postID);
         if (post.isEmpty()){
             throw new PostNotExist(postID);
         }
     }
 
-    public void checkComment(UUID commentID){
+    public void checkComment(int commentID){
         Optional<Comment> comment = commentRepository.findById(commentID);
         if (comment.isEmpty()){
             throw new CommentNotExist(commentID);
@@ -52,7 +51,7 @@ public class CommentService {
         Comment comment = commentMapper.dtoToComment(commentDto);
 
         LocalDateTime dateTime = LocalDateTime.now();
-        comment.setCommentID(UUID.randomUUID());
+        //comment.setCommentID(UUID.randomUUID());
         comment.setUserID(user.get().getUserID());
         comment.setUserImage(user.get().getUserImage());
         comment.setTime(dateTime);
@@ -62,9 +61,9 @@ public class CommentService {
         return commentMapper.toCommentDto(comment);
     }
 
-    public List<CommentDto> getCommentsByPostID(UUID postID){
+    public List<CommentDto> getCommentsByPostID(int postID){
         checkPost(postID);
-        List<Comment> comments = commentRepository.findAllByPostID(postID);
+        List<Comment> comments = commentRepository.findByPostID(postID);
         return commentMapper.toCommentDtos(comments);
     }
 
@@ -74,22 +73,22 @@ public class CommentService {
         return commentDtos;
     }
 
-    public List<CommentDto> deleteComment(UUID commentID){
+    public List<CommentDto> deleteComment(int commentID){
         checkComment(commentID);
         commentRepository.deleteById(commentID);
         return getAllComments();
     }
 
-    public List<CommentDto> getCommentsByUserID (UUID userID){
+    public List<CommentDto> getCommentsByUserID (int userID){
         userService.getUser(userID);
-        List<Comment> userComments = commentRepository.findAllByUserID(userID);
+        List<Comment> userComments = commentRepository.findByUserID(userID);
         List<CommentDto> commentDtos = commentMapper.toCommentDtos(userComments);
         return commentDtos;
     }
 
-    public List<CommentDto> deleteCommentsByUserID (UUID userID){
+    public List<CommentDto> deleteCommentsByUserID (int userID){
         userService.getUser(userID);
-        List<Comment> toDelete = commentRepository.findAllByUserID(userID);
+        List<Comment> toDelete = commentRepository.findByUserID(userID);
         commentRepository.deleteAll(toDelete);
         return getAllComments();
     }

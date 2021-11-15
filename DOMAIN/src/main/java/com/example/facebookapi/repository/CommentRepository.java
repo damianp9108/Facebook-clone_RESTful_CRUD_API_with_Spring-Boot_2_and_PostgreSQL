@@ -1,19 +1,14 @@
 package com.example.facebookapi.repository;
 
 import com.example.facebookapi.entity.Comment;
-import org.springframework.data.cassandra.repository.AllowFiltering;
-import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface CommentRepository extends CassandraRepository<Comment, UUID> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    @AllowFiltering
-    List<Comment> findAllByPostID(UUID postID);
-
-    @AllowFiltering
-    List<Comment> findAllByUserID (UUID userID);
+    List<Comment> findByPostID(int postID);
+    List<Comment> findByUserID (int userID);
 
 }

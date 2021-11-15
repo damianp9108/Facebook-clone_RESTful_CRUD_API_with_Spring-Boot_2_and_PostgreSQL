@@ -4,10 +4,8 @@ import com.example.facebookapi.dto.CommentDto;
 import com.example.facebookapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,13 +15,13 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping("/save")
+    @PostMapping
     public CommentDto save(@RequestBody @Valid CommentDto commentDto){
         return commentService.saveComment(commentDto);
     }
 
     @GetMapping("/{postID}")
-    public List<CommentDto> getByPostID(@PathVariable ("postID") UUID postID){
+    public List<CommentDto> getByPostID(@PathVariable ("postID") int postID){
         return commentService.getCommentsByPostID(postID);
     }
 
@@ -33,17 +31,17 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentID}")
-    public List<CommentDto> delete(@PathVariable("commentID") UUID commentID){
+    public List<CommentDto> delete(@PathVariable("commentID") int commentID){
         return commentService.deleteComment(commentID);
     }
 
     @GetMapping("/byUser/{userID}")
-    public List<CommentDto> getByUserID (@PathVariable("userID") UUID userID){
+    public List<CommentDto> getByUserID (@PathVariable("userID") int userID){
         return commentService.getCommentsByUserID(userID);
     }
 
     @DeleteMapping("/byUser/{userID}")
-    public List<CommentDto> deleteByUserID (@PathVariable("userID") UUID userID){
+    public List<CommentDto> deleteByUserID (@PathVariable("userID") int userID){
         return commentService.deleteCommentsByUserID(userID);
     }
 

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class StatusService {
 
         LocalDateTime time = LocalDateTime.now();
         Status newStatus = statusMapper.dtoToStatus(statusDto);
-        newStatus.setStatusID(UUID.randomUUID());
+        //newStatus.setStatusID(UUID.randomUUID());
         newStatus.setUserID(userFromDB.get().getUserID());
         newStatus.setUploadTime(time);
         statusRepository.save(newStatus);

@@ -6,10 +6,8 @@ import com.example.facebookapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,16 +16,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/save")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto save(@RequestBody @Valid SignUpDto userDto) {
          return userService.saveUser(userDto);
 
     }
 
-    @PutMapping("/update/{userID}")
+    @PutMapping("/{userID}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String update(@PathVariable("userID") UUID userID) {
+    public String update(@PathVariable("userID") int userID) {
         return userService.changeActive(userID);
     }
 
@@ -37,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/{userID}")
-    public UserDto getByUserID(@PathVariable("userID") UUID userID) {
+    public UserDto getByUserID(@PathVariable("userID") int userID) {
         return userService.getUser(userID);
     }
 

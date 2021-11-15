@@ -1,8 +1,6 @@
 package com.example.facebookapi;
 
 import com.example.facebookapi.exceptions.*;
-
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;

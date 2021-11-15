@@ -1,30 +1,36 @@
 package com.example.facebookapi.entity;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
-
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Table("Comment")
+@Table(name="Comments")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Comment {
 
-    @PrimaryKey
-    private UUID commentID;
-    private UUID postID;
-    private UUID userID;
+    @Id
+    @GeneratedValue
+    private int commentID;
+
+    @Column(name="postID")
+    private int postID;
+
+    @Column(name="userID")
+    private int userID;
+
+    @Column(name="userImage")
     private String userImage;
+
+    @Column(name = "userName")
     private String userName;
+
+    @Column(name = "comment")
     private String comment;
+
+    @Column(name = "time")
     private LocalDateTime time;
 
 }

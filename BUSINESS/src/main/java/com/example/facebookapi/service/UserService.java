@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class UserService {
 
         LocalDateTime dateTime = LocalDateTime.now();
         User newUser = userMapper.dtoToUser(userDto);
-            newUser.setUserID(UUID.randomUUID());
+            //newUser.setUserID(UUID.randomUUID());
             newUser.setActive(false);
             newUser.setJoiningDate(dateTime);
 
@@ -45,7 +44,7 @@ public class UserService {
         return userMapper.toUserDtos(users);
     }
 
-    public UserDto getUser(UUID userID) {
+    public UserDto getUser(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);
@@ -54,7 +53,7 @@ public class UserService {
 
     }
 
-    public String changeActive(UUID userID) {
+    public String changeActive(int userID) {
         Optional<User> userToChangeActive = userRepository.findById(userID);
         boolean activity = userToChangeActive.get().isActive();
         userToChangeActive.get().setActive(!activity);
