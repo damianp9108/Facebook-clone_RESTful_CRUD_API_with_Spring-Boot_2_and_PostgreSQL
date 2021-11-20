@@ -31,7 +31,12 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> get() {
-        return userService.getAllUsers();
+        return userService.getAllUsersWithPosts();
+    }
+
+    @GetMapping("/list")
+    public List<String> getUserNamesList() {
+        return userService.getUserNamesList();
     }
 
     @GetMapping("/{userID}")

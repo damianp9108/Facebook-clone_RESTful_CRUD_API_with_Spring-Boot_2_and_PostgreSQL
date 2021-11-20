@@ -3,6 +3,7 @@ package com.example.facebookapi.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Users")
@@ -12,7 +13,8 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userID")
     private int userID;
 
     @Column(name = "userName")
@@ -29,6 +31,9 @@ public class User {
 
     @Column(name = "joiningDate")
     private LocalDateTime joiningDate;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")  // cascade = CascadeType.ALL
+    private List<Post> posts;
 
 }
 

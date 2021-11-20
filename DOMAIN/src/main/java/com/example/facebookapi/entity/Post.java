@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 public class Post {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "postID")
     private int postID;
 
-    @Column(name = "userID")
-    private int userID;
-
-    @Column(name = "userName")
-    private String userName;
-
-    @Column(name = "imageURL")
-    private String imageURL;
+    @ManyToOne(fetch = FetchType.EAGER) // cascade = CascadeType.ALL,
+    @JoinColumn(name = "userId", referencedColumnName = "userID")
+    private User user;
 
     @Column(name = "description")
     private String description;

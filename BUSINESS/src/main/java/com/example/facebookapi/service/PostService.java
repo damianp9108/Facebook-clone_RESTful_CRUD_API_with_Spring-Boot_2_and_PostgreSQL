@@ -32,9 +32,9 @@ public class PostService {
 
 
         public PostDto savePost (PostDto postDto) {
-            Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserName());
+            Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserDto().getUserName());
             if (userFromDB.isEmpty()) {
-                throw new UsernameNotExist(postDto.getUserName());
+                throw new UsernameNotExist(postDto.getUserDto().getUserName());
             }
 
             if ((postDto.getDescription() == null || postDto.getDescription().isBlank()) &&
@@ -46,11 +46,10 @@ public class PostService {
         LocalDateTime time = LocalDateTime.now();
 
             Post newPost = postMapper.dtoToPost(postDto);
-            //newPost.setPostID(UUID.randomUUID());
-            newPost.setUserID(userFromDB.get().getUserID());
-            newPost.setImageURL(userFromDB.get().getUserImage());
+            newPost.setUser(userFromDB.get());
             newPost.setLikes(0);
             newPost.setDateTime(time);
+
             postRepository.save(newPost);
 
             return postMapper.toPostDto(newPost);
@@ -83,7 +82,7 @@ public class PostService {
             throw new UserNotExist(userID);
         }
 
-        List<Post> userPosts = postRepository.findByUserID(userID);
+        List<Post> userPosts = postRepository.findByUser(userFromDB.get());
         return postMapper.toPostDtos(userPosts);
     }
 
@@ -93,7 +92,7 @@ public class PostService {
             throw new UserNotExist(userID);
         }
 
-        List<Post> userPosts = postRepository.findByUserID(userID);
+        List<Post> userPosts = postRepository.findByUser(userFromDB.get());
 
         userPosts.forEach(post -> {
             List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());

@@ -12,20 +12,13 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentID;
 
-    @Column(name="postID")
-    private int postID;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
-    @Column(name="userID")
-    private int userID;
-
-    @Column(name="userImage")
-    private String userImage;
-
-    @Column(name = "userName")
-    private String userName;
+    private Post post;
 
     @Column(name = "comment")
     private String comment;

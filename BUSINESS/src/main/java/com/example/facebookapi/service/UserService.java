@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +40,16 @@ public class UserService {
             return userMapper.toUserDto(newUser);
     }
 
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsersWithPosts() {
         List<User> users = userRepository.findAll();
         return userMapper.toUserDtos(users);
+    }
+
+    public List<String> getUserNamesList() {
+        List<String> userNamesList = userRepository.findAll().stream()
+                .map(user -> user.getUserName())
+                .collect(Collectors.toList());
+        return userNamesList;
     }
 
     public UserDto getUser(int userID) {
