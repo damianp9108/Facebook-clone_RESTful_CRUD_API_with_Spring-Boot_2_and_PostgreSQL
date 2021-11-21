@@ -16,8 +16,11 @@ public class Comment {
     private int commentID;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User user;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "postID", referencedColumnName = "postID")
     private Post post;
 
     @Column(name = "comment")

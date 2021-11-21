@@ -71,6 +71,8 @@ public class PostService {
         List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(postID);
         List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
         commentRepository.deleteAll(comments);
+
+
         postRepository.deleteById(postID);
 
         return getPosts();

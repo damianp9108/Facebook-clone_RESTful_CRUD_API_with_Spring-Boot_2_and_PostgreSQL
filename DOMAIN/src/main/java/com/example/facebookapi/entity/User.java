@@ -1,5 +1,6 @@
 package com.example.facebookapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,6 +36,8 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")  // cascade = CascadeType.ALL
     private List<Post> posts;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Comment> comments;
 }
 
 

@@ -1,12 +1,13 @@
 package com.example.facebookapi.service;
 
 import com.example.facebookapi.dto.CommentDto;
+import com.example.facebookapi.dto.CommentDtoRequestBody;
 import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.CommentNotExist;
 import com.example.facebookapi.exceptions.PostNotExist;
-import com.example.facebookapi.exceptions.UsernameNotExist;
+import com.example.facebookapi.exceptions.UserNotExist;
 import com.example.facebookapi.mappers.CommentMapper;
 import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.repository.PostRepository;
@@ -41,20 +42,21 @@ public class CommentService {
         }
     }
 
-    public CommentDto saveComment(CommentDto commentDto){
-        Optional<User> user = userRepository.findByUserName(commentDto.getUserName());
+    public CommentDto saveComment(CommentDtoRequestBody newComment){
+        Optional<User> user = userRepository.findById(newComment.getUserID());
         if (user.isEmpty()){
-            throw new UsernameNotExist(commentDto.getUserName());
+            throw new UserNotExist(newComment.getUserID());
         }
-        checkPost(commentDto.getPostID());
+        checkPost(newComment.getPostID());
 
-        Comment comment = commentMapper.dtoToComment(commentDto);
+        Comment comment = new Comment();
 
         LocalDateTime dateTime = LocalDateTime.now();
-        //comment.setCommentID(UUID.randomUUID());
-        comment.setUserID(user.get().getUserID());
-        comment.setUserImage(user.get().getUserImage());
+        comment.setUser(user.get());
+        Post post = postRepository.getById(newComment.getPostID());
+        comment.setPost(post);
         comment.setTime(dateTime);
+        comment.setComment(newComment.getComment());
 
         commentRepository.save(comment);
 
@@ -63,7 +65,7 @@ public class CommentService {
 
     public List<CommentDto> getCommentsByPostID(int postID){
         checkPost(postID);
-        List<Comment> comments = commentRepository.findByPostID(postID);
+        List<Comment> comments = commentRepository.findAllByPost(postID);
         return commentMapper.toCommentDtos(comments);
     }
 
@@ -81,15 +83,17 @@ public class CommentService {
 
     public List<CommentDto> getCommentsByUserID (int userID){
         userService.getUser(userID);
-        List<Comment> userComments = commentRepository.findByUserID(userID);
+        List<Comment> userComments = commentRepository.findAllByUser(userID);
         List<CommentDto> commentDtos = commentMapper.toCommentDtos(userComments);
         return commentDtos;
     }
 
     public List<CommentDto> deleteCommentsByUserID (int userID){
         userService.getUser(userID);
-        List<Comment> toDelete = commentRepository.findByUserID(userID);
+        List<Comment> toDelete = commentRepository.findAllByUser(userID);
         commentRepository.deleteAll(toDelete);
         return getAllComments();
     }
+
+
 }

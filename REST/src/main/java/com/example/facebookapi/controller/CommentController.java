@@ -1,6 +1,7 @@
 package com.example.facebookapi.controller;
 
 import com.example.facebookapi.dto.CommentDto;
+import com.example.facebookapi.dto.CommentDtoRequestBody;
 import com.example.facebookapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class CommentController {
 
 
     @PostMapping
-    public CommentDto save(@RequestBody @Valid CommentDto commentDto){
-        return commentService.saveComment(commentDto);
+    public CommentDto save(@RequestBody @Valid CommentDtoRequestBody newComment){
+        return commentService.saveComment(newComment);
     }
 
     @GetMapping("/{postID}")

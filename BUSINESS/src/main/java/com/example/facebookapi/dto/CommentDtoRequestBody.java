@@ -1,22 +1,21 @@
 package com.example.facebookapi.dto;
 
-import com.example.facebookapi.entity.Post;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class CommentDtoRequestBody {
 
+    private int userID;
+    private int postID;
 
-    private UserDto userDto;
-    private PostDto postDto;
+    @NotBlank(message = "komentarz nie moze byc pusty")
+    @Length(max = 300, message = "komentarz jest za dlugi")
     private String comment;
-    private LocalDateTime time;
 }

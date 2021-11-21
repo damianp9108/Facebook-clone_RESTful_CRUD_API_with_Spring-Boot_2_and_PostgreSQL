@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="Posts")
@@ -20,6 +21,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER) // cascade = CascadeType.ALL,
     @JoinColumn(name = "userId", referencedColumnName = "userID")
     private User user;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
+    private List<Comment> comments;
 
     @Column(name = "description")
     private String description;
