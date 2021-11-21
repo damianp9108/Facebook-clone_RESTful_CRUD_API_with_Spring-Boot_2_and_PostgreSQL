@@ -15,7 +15,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentID;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)             // cascade = CascadeType.ALL
     @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User user;
 
