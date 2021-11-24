@@ -18,11 +18,11 @@ public class Post {
     @Column(name = "postID")
     private int postID;
 
-    @ManyToOne(fetch = FetchType.EAGER) // cascade = CascadeType.ALL,
+    @ManyToOne(fetch = FetchType.LAZY) // cascade = CascadeType.ALL,
     @JoinColumn(name = "userId", referencedColumnName = "userID")
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @Column(name = "description")

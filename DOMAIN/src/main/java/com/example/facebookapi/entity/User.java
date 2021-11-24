@@ -1,6 +1,5 @@
 package com.example.facebookapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,10 +32,10 @@ public class User {
     @Column(name = "joiningDate")
     private LocalDateTime joiningDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")  // cascade = CascadeType.ALL
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)  // cascade = CascadeType.ALL
     private List<Post> posts;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
 }
 

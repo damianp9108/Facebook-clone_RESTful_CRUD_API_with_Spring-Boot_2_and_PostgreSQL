@@ -67,11 +67,11 @@ public class PostService {
         if (post.isEmpty()){
             throw new PostNotExist(postID);
         }
-
+/*
         List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(postID);
         List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
         commentRepository.deleteAll(comments);
-
+*/
 
         postRepository.deleteById(postID);
 
@@ -97,10 +97,10 @@ public class PostService {
         List<Post> userPosts = postRepository.findByUser(userFromDB.get());
 
         userPosts.forEach(post -> {
-            List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
-            List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
+           // List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
+           // List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
 
-            commentRepository.deleteAll(comments);
+           // commentRepository.deleteAll(comments);
             postRepository.delete(post);
         });
 

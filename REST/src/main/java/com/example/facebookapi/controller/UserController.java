@@ -49,4 +49,8 @@ public class UserController {
         return userService.login(userDto);
     }
 
+    @DeleteMapping("/{userID}")
+    public List<UserDto> deleteUser(@PathVariable("userID") int userID){
+        return userService.deleteUser(userID);
+    }
 }

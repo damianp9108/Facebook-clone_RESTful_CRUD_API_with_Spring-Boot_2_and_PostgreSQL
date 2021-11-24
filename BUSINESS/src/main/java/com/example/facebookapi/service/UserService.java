@@ -85,4 +85,15 @@ public class UserService {
         return !user.getPassword().equals(password);
     }
 
+    public List<UserDto> deleteUser (int userID){
+        Optional<User> userFromDB = userRepository.findById(userID);
+        if (userFromDB.isEmpty()) {
+            throw new UserNotExist(userID);
+        }
+        userRepository.deleteById(userID);
+
+        return getAllUsersWithPosts();
+
+    }
+
 }

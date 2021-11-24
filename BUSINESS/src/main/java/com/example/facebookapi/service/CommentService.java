@@ -97,9 +97,13 @@ public class CommentService {
     }
 
     public List<CommentDto> deleteCommentsByUserID (int userID){
-        List<CommentDto> comments = getCommentsByUserID(userID);
-        List<Comment> commentsToDelete = commentMapper.dtosToComments(comments);
-        commentRepository.deleteAll(commentsToDelete);
+        Optional<User> user = userRepository.findById(userID);
+        if (user.isEmpty()) {
+            throw new UserNotExist(userID);
+        }
+
+        List<Comment> userComments = commentRepository.findAllByUser(user.get());
+        commentRepository.deleteAll(userComments);
         return getAllComments();
     }
 
