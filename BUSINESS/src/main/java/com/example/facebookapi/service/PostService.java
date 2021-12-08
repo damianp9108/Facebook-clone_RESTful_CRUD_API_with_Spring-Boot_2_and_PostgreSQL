@@ -1,8 +1,6 @@
 package com.example.facebookapi.service;
 
-import com.example.facebookapi.dto.CommentDto;
 import com.example.facebookapi.dto.PostDto;
-import com.example.facebookapi.entity.Comment;
 import com.example.facebookapi.entity.Post;
 import com.example.facebookapi.entity.User;
 import com.example.facebookapi.exceptions.PostException;
@@ -16,8 +14,10 @@ import com.example.facebookapi.repository.PostRepository;
 import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +31,13 @@ public class PostService {
     private final CommentMapper commentMapper;
 
 
-        public PostDto savePost (PostDto postDto) {
-            Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserDto().getUserName());
-            if (userFromDB.isEmpty()) {
-                throw new UsernameNotExist(postDto.getUserDto().getUserName());
-            }
+    public PostDto savePost(PostDto postDto) {
+        Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserDto().getUserName());
+        if (userFromDB.isEmpty()) {
+            throw new UsernameNotExist(postDto.getUserDto().getUserName());
+        }
 
-            if ((postDto.getDescription() == null || postDto.getDescription().isBlank()) &&
+        if ((postDto.getDescription() == null || postDto.getDescription().isBlank()) &&
                 (postDto.getPostImgURL() == null || postDto.getPostImgURL().isBlank())) {
             throw new PostException();
         }
@@ -45,26 +45,26 @@ public class PostService {
 
         LocalDateTime time = LocalDateTime.now();
 
-            Post newPost = postMapper.dtoToPost(postDto);
-            newPost.setUser(userFromDB.get());
-            newPost.setLikes(0);
-            newPost.setDateTime(time);
+        Post newPost = postMapper.dtoToPost(postDto);
+        newPost.setUser(userFromDB.get());
+        newPost.setLikes(0);
+        newPost.setDateTime(time);
 
-            postRepository.save(newPost);
+        postRepository.save(newPost);
 
-            return postMapper.toPostDto(newPost);
+        return postMapper.toPostDto(newPost);
 
     }
 
 
-    public List<PostDto> getPosts(){
+    public List<PostDto> getPosts() {
         List<Post> posts = postRepository.findAll();
         return postMapper.toPostDtos(posts);
     }
 
-    public List<PostDto> deletePost(int postID){
+    public List<PostDto> deletePost(int postID) {
         Optional<Post> post = postRepository.findById(postID);
-        if (post.isEmpty()){
+        if (post.isEmpty()) {
             throw new PostNotExist(postID);
         }
 /*
@@ -78,7 +78,7 @@ public class PostService {
         return getPosts();
     }
 
-    public List<PostDto> getUserPosts (int userID){
+    public List<PostDto> getUserPosts(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);
@@ -88,7 +88,7 @@ public class PostService {
         return postMapper.toPostDtos(userPosts);
     }
 
-    public List<PostDto> deleteUserPosts (int userID){
+    public List<PostDto> deleteUserPosts(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);
@@ -97,10 +97,10 @@ public class PostService {
         List<Post> userPosts = postRepository.findByUser(userFromDB.get());
 
         userPosts.forEach(post -> {
-           // List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
-           // List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
+            // List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
+            // List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
 
-           // commentRepository.deleteAll(comments);
+            // commentRepository.deleteAll(comments);
             postRepository.delete(post);
         });
 

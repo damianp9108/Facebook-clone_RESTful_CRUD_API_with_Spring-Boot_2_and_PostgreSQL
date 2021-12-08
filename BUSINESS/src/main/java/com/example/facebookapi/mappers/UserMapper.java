@@ -14,9 +14,10 @@ public interface UserMapper {
     UserDto toUserDto(User user);
 
     List<UserDto> toUserDtos(List<User> users);
+
     User dtoToUser(SignUpDto userDto);
 
-    @Mapping(source = "postsDTO", target = "posts")
+    @Mapping(source = "postsDTO", target = "posts" )
     User dtoToUser(UserDto userDto);
 
 }

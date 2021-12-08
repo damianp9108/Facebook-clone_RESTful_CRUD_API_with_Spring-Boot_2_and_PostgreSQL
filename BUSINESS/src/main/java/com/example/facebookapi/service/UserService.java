@@ -10,6 +10,7 @@ import com.example.facebookapi.mappers.UserMapper;
 import com.example.facebookapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ public class UserService {
     private final UserMapper userMapper;
 
 
-    public UserDto saveUser(SignUpDto userDto)  {
+    public UserDto saveUser(SignUpDto userDto) {
         Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
         if (userFromDB.isPresent()) {
             throw new UserAlreadyExistsException(userDto.getUserName());
@@ -31,13 +32,12 @@ public class UserService {
 
         LocalDateTime dateTime = LocalDateTime.now();
         User newUser = userMapper.dtoToUser(userDto);
-            //newUser.setUserID(UUID.randomUUID());
-            newUser.setActive(false);
-            newUser.setJoiningDate(dateTime);
+        newUser.setActive(false);
+        newUser.setJoiningDate(dateTime);
 
-            userRepository.save(newUser);
+        var savedUser = userRepository.save(newUser);
 
-            return userMapper.toUserDto(newUser);
+        return userMapper.toUserDto(savedUser);
     }
 
     public List<UserDto> getAllUsersWithPosts() {
@@ -47,7 +47,7 @@ public class UserService {
 
     public List<String> getUserNamesList() {
         List<String> userNamesList = userRepository.findAll().stream()
-                .map(user -> user.getUserName())
+                .map(User::getUserName)
                 .collect(Collectors.toList());
         return userNamesList;
     }
@@ -71,10 +71,10 @@ public class UserService {
     }
 
 
-    public UserDto login(SignUpDto userDto){
+    public UserDto login(SignUpDto userDto) {
         Optional<User> userFromDb = userRepository.findByUserName(userDto.getUserName());
 
-        if(userFromDb.isEmpty() || wrongPassword(userFromDb.get(), userDto.getPassword())){
+        if (userFromDb.isEmpty() || wrongPassword(userFromDb.get(), userDto.getPassword())) {
             throw new LoginErrorException();
         }
 
@@ -85,7 +85,7 @@ public class UserService {
         return !user.getPassword().equals(password);
     }
 
-    public List<UserDto> deleteUser (int userID){
+    public List<UserDto> deleteUser(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
             throw new UserNotExist(userID);

@@ -2,6 +2,7 @@ package com.example.facebookapi.controller;
 
 import com.example.facebookapi.dto.CommentDto;
 import com.example.facebookapi.dto.CommentDtoRequestBody;
+import com.example.facebookapi.repository.CommentRepository;
 import com.example.facebookapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-
 
     @PostMapping
     public CommentDto save(@RequestBody @Valid CommentDtoRequestBody newComment){

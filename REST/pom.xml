@@ -21,15 +21,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>DOMAIN</artifactId>
-            <groupId>com.example</groupId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>BUSINESS</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

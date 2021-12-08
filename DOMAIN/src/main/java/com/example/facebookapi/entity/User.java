@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 @Table(name = "Users")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
@@ -17,19 +16,10 @@ public class User {
     @Column(name = "userID")
     private int userID;
 
-    @Column(name = "userName")
     private String userName;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "userImage")
     private String userImage;
-
-    @Column(name = "active")
     private boolean active;
-
-    @Column(name = "joiningDate")
     private LocalDateTime joiningDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)  // cascade = CascadeType.ALL
@@ -37,6 +27,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    public User(String userName, String password, String userImage) {
+        this.userName = userName;
+        this.password = password;
+        this.userImage = userImage;
+    }
 }
 
 
