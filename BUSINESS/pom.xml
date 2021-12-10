@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <artifactId>BUSINESS</artifactId>
+    <artifactId>business</artifactId>
     <packaging>jar</packaging>
 
 
@@ -24,9 +24,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>DOMAIN</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domain</artifactId>
         </dependency>
     </dependencies>
 

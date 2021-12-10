@@ -4,16 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>DOMAIN</module>
-        <module>BUSINESS</module>
-        <module>REST</module>
+        <module>domain</module>
+        <module>business</module>
+        <module>rest</module>
     </modules>
 
     <groupId>com.example</groupId>
     <artifactId>facebook-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>facebook-api</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Simple Spring Boot Project</description>
 
     <properties>
         <java.version>16</java.version>
@@ -31,12 +31,17 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>DOMAIN</artifactId>
+                <artifactId>domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>BUSINESS</artifactId>
+                <artifactId>business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
