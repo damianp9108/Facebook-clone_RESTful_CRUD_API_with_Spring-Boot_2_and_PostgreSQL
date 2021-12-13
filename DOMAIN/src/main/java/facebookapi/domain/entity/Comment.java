@@ -6,28 +6,29 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Comments")
+@Table(name = "Comments")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int commentID;
+    private int commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)             // cascade = CascadeType.ALL
-    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postID", referencedColumnName = "postID")
+    @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
 
-    @Column(name = "comment")
+    //@Column(name = "comment")
     private String comment;
 
-    @Column(name = "time")
+    //@Column(name = "time")
     private LocalDateTime time;
 
 }

@@ -1,7 +1,7 @@
 package facebookapi.business.exceptions;
 
-public class UsernameNotExist extends RuntimeException{
-    public UsernameNotExist(String userName){
+public class UsernameNotExistException extends RuntimeException{
+    public UsernameNotExistException(String userName){
         super("Uzytkownik o podanej nazwie uzytkownika: '" + userName + "' nie istnieje");
     }
 }

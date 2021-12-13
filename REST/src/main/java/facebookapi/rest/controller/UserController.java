@@ -23,10 +23,10 @@ public class UserController {
 
     }
 
-    @PutMapping("/{userID}")
+    @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String update(@PathVariable("userID") int userID) {
-        return userService.changeActive(userID);
+    public String update(@PathVariable("userId") int userId) {
+        return userService.changeActive(userId);
     }
 
     @GetMapping
@@ -39,9 +39,9 @@ public class UserController {
         return userService.getUserNamesList();
     }
 
-    @GetMapping("/{userID}")
-    public UserDto getByUserID(@PathVariable("userID") int userID) {
-        return userService.getUser(userID);
+    @GetMapping("/{userId}")
+    public UserDto getByUserId(@PathVariable("userId") int userId) {
+        return userService.getUser(userId);
     }
 
     @PostMapping("/login")
@@ -49,8 +49,8 @@ public class UserController {
         return userService.login(userDto);
     }
 
-    @DeleteMapping("/{userID}")
-    public List<UserDto> deleteUser(@PathVariable("userID") int userID){
-        return userService.deleteUser(userID);
+    @DeleteMapping("/{userId}")
+    public List<UserDto> deleteUser(@PathVariable("userId") int userId){
+        return userService.deleteUser(userId);
     }
 }

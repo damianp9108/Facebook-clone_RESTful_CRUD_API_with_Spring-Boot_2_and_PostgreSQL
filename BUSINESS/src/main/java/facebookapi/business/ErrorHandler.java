@@ -17,9 +17,9 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ExceptionHandler(UserAlreadyExistException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    public String recordAlreadyExistsHandler(UserAlreadyExistsException ex){
+    public String recordAlreadyExistsHandler(UserAlreadyExistException ex){
         return ex.getMessage();
     }
 
@@ -29,15 +29,15 @@ public class ErrorHandler {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(UserNotExist.class)
+    @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String userNotExistHandler(UserNotExist ex){
+    public String userNotExistHandler(UserNotExistException ex){
         return ex.getMessage();
     }
 
-    @ExceptionHandler(UsernameNotExist.class)
+    @ExceptionHandler(UsernameNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String usernameNotExistHandler(UsernameNotExist ex){
+    public String usernameNotExistHandler(UsernameNotExistException ex){
         return ex.getMessage();
     }
 
@@ -100,15 +100,15 @@ public class ErrorHandler {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(PostNotExist.class)
+    @ExceptionHandler(PostNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String postNotExistHandler(PostNotExist ex){
+    public String postNotExistHandler(PostNotExistException ex){
         return ex.getMessage();
     }
 
-    @ExceptionHandler(CommentNotExist.class)
+    @ExceptionHandler(CommentNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String commentNotExistHandler(CommentNotExist ex){
+    public String commentNotExistExceptionHandler(CommentNotExistException ex){
         return ex.getMessage();
     }
 }

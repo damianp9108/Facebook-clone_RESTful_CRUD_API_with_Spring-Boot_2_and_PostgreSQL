@@ -8,14 +8,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "Users")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userID")
-    private int userID;
+    //@Column(name = "userId")
+    private int userId;
 
     private String userName;
     private String password;
@@ -23,7 +25,7 @@ public class User {
     private boolean active;
     private LocalDateTime joiningDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)  // cascade = CascadeType.ALL
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

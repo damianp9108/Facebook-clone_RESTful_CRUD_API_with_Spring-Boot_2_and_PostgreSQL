@@ -1,19 +1,18 @@
 package facebookapi.business.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDtoRequestBody {
 
-    private int userID;
-    private int postID;
+    private int userId;
+    private int postId;
 
     @NotBlank(message = "komentarz nie moze byc pusty")
     @Length(max = 300, message = "komentarz jest za dlugi")

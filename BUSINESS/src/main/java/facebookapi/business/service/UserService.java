@@ -3,8 +3,8 @@ package facebookapi.business.service;
 import facebookapi.business.dto.SignUpDto;
 import facebookapi.business.dto.UserDto;
 import facebookapi.domain.entity.User;
-import facebookapi.business.exceptions.UserAlreadyExistsException;
-import facebookapi.business.exceptions.UserNotExist;
+import facebookapi.business.exceptions.UserAlreadyExistException;
+import facebookapi.business.exceptions.UserNotExistException;
 import facebookapi.business.mappers.UserMapper;
 import facebookapi.domain.repository.UserRepository;
 import facebookapi.business.exceptions.LoginErrorException;
@@ -27,7 +27,7 @@ public class UserService {
     public UserDto saveUser(SignUpDto userDto) {
         Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
         if (userFromDB.isPresent()) {
-            throw new UserAlreadyExistsException(userDto.getUserName());
+            throw new UserAlreadyExistException(userDto.getUserName());
         }
 
         LocalDateTime dateTime = LocalDateTime.now();
@@ -55,7 +55,7 @@ public class UserService {
     public UserDto getUser(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userID);
         }
         return userMapper.toUserDto(userFromDB.get());
 
@@ -88,7 +88,7 @@ public class UserService {
     public List<UserDto> deleteUser(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userID);
         }
         userRepository.deleteById(userID);
 

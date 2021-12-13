@@ -2,19 +2,20 @@ package facebookapi.business.service;
 
 import facebookapi.business.dto.CommentDto;
 import facebookapi.business.dto.CommentDtoRequestBody;
+import facebookapi.business.exceptions.CommentNotExistException;
+import facebookapi.business.exceptions.PostNotExistException;
+import facebookapi.business.exceptions.UserNotExistException;
+import facebookapi.business.mappers.CommentMapper;
+import facebookapi.business.mappers.UserMapper;
 import facebookapi.domain.entity.Comment;
 import facebookapi.domain.entity.Post;
 import facebookapi.domain.entity.User;
-import facebookapi.business.mappers.UserMapper;
 import facebookapi.domain.repository.CommentRepository;
 import facebookapi.domain.repository.PostRepository;
 import facebookapi.domain.repository.UserRepository;
-import facebookapi.business.exceptions.CommentNotExist;
-import facebookapi.business.exceptions.PostNotExist;
-import facebookapi.business.exceptions.UserNotExist;
-import facebookapi.business.mappers.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,33 +31,33 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final UserMapper userMapper;
 
-    public Post checkPost(int postID){
-        Optional<Post> post = postRepository.findById(postID);
+    public Post checkPost(int postId){
+        Optional<Post> post = postRepository.findById(postId);
         if (post.isEmpty()){
-            throw new PostNotExist(postID);
+            throw new PostNotExistException(postId);
         }
         return post.get();
     }
 
-    public void checkComment(int commentID){
-        Optional<Comment> comment = commentRepository.findById(commentID);
+    public void checkComment(int commentId){
+        Optional<Comment> comment = commentRepository.findById(commentId);
         if (comment.isEmpty()){
-            throw new CommentNotExist(commentID);
+            throw new CommentNotExistException(commentId);
         }
     }
 
     public CommentDto saveComment(CommentDtoRequestBody newComment){
-        Optional<User> user = userRepository.findById(newComment.getUserID());
+        Optional<User> user = userRepository.findById(newComment.getUserId());
         if (user.isEmpty()){
-            throw new UserNotExist(newComment.getUserID());
+            throw new UserNotExistException(newComment.getUserId());
         }
-        checkPost(newComment.getPostID());
+        checkPost(newComment.getPostId());
 
         Comment comment = new Comment();
 
         LocalDateTime dateTime = LocalDateTime.now();
         comment.setUser(user.get());
-        Post post = postRepository.getById(newComment.getPostID());
+        Post post = postRepository.getById(newComment.getPostId());
         comment.setPost(post);
         comment.setTime(dateTime);
         comment.setComment(newComment.getComment());
@@ -66,8 +67,8 @@ public class CommentService {
         return commentMapper.toCommentDto(comment);
     }
 
-    public List<CommentDto> getCommentsByPostID(int postID){
-        Post post = checkPost(postID);
+    public List<CommentDto> getCommentsByPostId(int postId){
+        Post post = checkPost(postId);
         List<Comment> comments = commentRepository.findAllByPost(post);
         return commentMapper.toCommentDtos(comments);
     }
@@ -78,16 +79,16 @@ public class CommentService {
         return commentDtos;
     }
 
-    public List<CommentDto> deleteComment(int commentID){
-        checkComment(commentID);
-        commentRepository.deleteById(commentID);
+    public List<CommentDto> deleteComment(int commentId){
+        checkComment(commentId);
+        commentRepository.deleteById(commentId);
         return getAllComments();
     }
 
-    public List<CommentDto> getCommentsByUserID (int userID){
-        Optional<User> user = userRepository.findById(userID);
+    public List<CommentDto> getCommentsByUserId (int userId){
+        Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userId);
         }
 
         List<Comment> userComments = commentRepository.findAllByUser(user.get());
@@ -95,10 +96,10 @@ public class CommentService {
         return commentDtos;
     }
 
-    public List<CommentDto> deleteCommentsByUserID (int userID){
-        Optional<User> user = userRepository.findById(userID);
+    public List<CommentDto> deleteCommentsByUserId (int userId){
+        Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userId);
         }
 
         List<Comment> userComments = commentRepository.findAllByUser(user.get());

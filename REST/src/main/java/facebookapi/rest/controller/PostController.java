@@ -29,18 +29,18 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public List<PostDto> delete(@PathVariable("postId") int postID){
-        return postService.deletePost(postID);
+    public List<PostDto> delete(@PathVariable("postId") int postId){
+        return postService.deletePost(postId);
 
     }
 
-    @GetMapping("/{userID}")
-    public List<PostDto> getByUserID (@PathVariable("userID") int userID){
-        return postService.getUserPosts(userID);
+    @GetMapping("/{userId}")
+    public List<PostDto> getByUserId (@PathVariable("userId") int userId){
+        return postService.getUserPosts(userId);
     }
 
-    @DeleteMapping("/byUser/{userID}")
-    public List<PostDto> deleteByUserID (@PathVariable("userID") int userID){
-        return postService.deleteUserPosts(userID);
+    @DeleteMapping("/byUser/{userId}")
+    public List<PostDto> deleteByUserId (@PathVariable("userId") int userId){
+        return postService.deleteUserPosts(userId);
     }
 }

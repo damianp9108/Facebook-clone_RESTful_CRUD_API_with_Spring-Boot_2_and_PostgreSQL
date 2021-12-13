@@ -7,9 +7,9 @@ import facebookapi.domain.repository.CommentRepository;
 import facebookapi.domain.repository.PostRepository;
 import facebookapi.domain.repository.UserRepository;
 import facebookapi.business.exceptions.PostException;
-import facebookapi.business.exceptions.PostNotExist;
-import facebookapi.business.exceptions.UserNotExist;
-import facebookapi.business.exceptions.UsernameNotExist;
+import facebookapi.business.exceptions.PostNotExistException;
+import facebookapi.business.exceptions.UserNotExistException;
+import facebookapi.business.exceptions.UsernameNotExistException;
 import facebookapi.business.dto.PostDto;
 import facebookapi.business.mappers.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class PostService {
     public PostDto savePost(PostDto postDto) {
         Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserDto().getUserName());
         if (userFromDB.isEmpty()) {
-            throw new UsernameNotExist(postDto.getUserDto().getUserName());
+            throw new UsernameNotExistException(postDto.getUserDto().getUserName());
         }
 
         if ((postDto.getDescription() == null || postDto.getDescription().isBlank()) &&
@@ -65,7 +65,7 @@ public class PostService {
     public List<PostDto> deletePost(int postID) {
         Optional<Post> post = postRepository.findById(postID);
         if (post.isEmpty()) {
-            throw new PostNotExist(postID);
+            throw new PostNotExistException(postID);
         }
 /*
         List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(postID);
@@ -81,7 +81,7 @@ public class PostService {
     public List<PostDto> getUserPosts(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userID);
         }
 
         List<Post> userPosts = postRepository.findByUser(userFromDB.get());
@@ -91,7 +91,7 @@ public class PostService {
     public List<PostDto> deleteUserPosts(int userID) {
         Optional<User> userFromDB = userRepository.findById(userID);
         if (userFromDB.isEmpty()) {
-            throw new UserNotExist(userID);
+            throw new UserNotExistException(userID);
         }
 
         List<Post> userPosts = postRepository.findByUser(userFromDB.get());

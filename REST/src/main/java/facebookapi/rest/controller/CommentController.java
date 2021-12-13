@@ -20,9 +20,9 @@ public class CommentController {
         return commentService.saveComment(newComment);
     }
 
-    @GetMapping("/{postID}")
-    public List<CommentDto> getByPostID(@PathVariable ("postID") int postID){
-        return commentService.getCommentsByPostID(postID);
+    @GetMapping("/{postId}")
+    public List<CommentDto> getByPostId(@PathVariable ("postId") int postId){
+        return commentService.getCommentsByPostId(postId);
     }
 
     @GetMapping
@@ -30,19 +30,19 @@ public class CommentController {
         return commentService.getAllComments();
     }
 
-    @DeleteMapping("/{commentID}")
-    public List<CommentDto> delete(@PathVariable("commentID") int commentID){
-        return commentService.deleteComment(commentID);
+    @DeleteMapping("/{commentId}")
+    public List<CommentDto> delete(@PathVariable("commentId") int commentId){
+        return commentService.deleteComment(commentId);
     }
 
-    @GetMapping("/byUser/{userID}")
-    public List<CommentDto> getByUserID (@PathVariable("userID") int userID){
-        return commentService.getCommentsByUserID(userID);
+    @GetMapping("/byUser/{userId}")
+    public List<CommentDto> getByUserId (@PathVariable("userId") int userId){
+        return commentService.getCommentsByUserId(userId);
     }
 
-    @DeleteMapping("/byUser/{userID}")
-    public List<CommentDto> deleteByUserID (@PathVariable("userID") int userID){
-        return commentService.deleteCommentsByUserID(userID);
+    @DeleteMapping("/byUser/{userId}")
+    public List<CommentDto> deleteByUserId (@PathVariable("userId") int userId){
+        return commentService.deleteCommentsByUserId(userId);
     }
 
 }
