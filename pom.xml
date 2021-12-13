@@ -11,7 +11,7 @@
         <module>application</module>
     </modules>
 
-    <groupId>com.example</groupId>
+    <groupId>facebookapi</groupId>
     <artifactId>facebook-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>facebook-api</name>
