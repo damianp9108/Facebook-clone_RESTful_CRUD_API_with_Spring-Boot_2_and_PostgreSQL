@@ -8,6 +8,7 @@
         <module>domain</module>
         <module>business</module>
         <module>rest</module>
+        <module>application</module>
     </modules>
 
     <groupId>com.example</groupId>
@@ -38,6 +39,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -74,6 +80,11 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
         </dependency>
     </dependencies>
 
