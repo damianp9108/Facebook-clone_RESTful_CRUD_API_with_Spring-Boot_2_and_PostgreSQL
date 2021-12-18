@@ -1,7 +1,7 @@
 package facebookapi.business.service;
 
 import facebookapi.business.dto.CommentDto;
-import facebookapi.business.dto.CommentDtoRequestBody;
+import facebookapi.business.dto.NewCommentDto;
 import facebookapi.business.exceptions.CommentNotExistException;
 import facebookapi.business.exceptions.PostNotExistException;
 import facebookapi.business.exceptions.UserNotExistException;
@@ -31,13 +31,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final UserMapper userMapper;
 
-    public Post checkPost(int postId){
-        Optional<Post> post = postRepository.findById(postId);
-        if (post.isEmpty()){
-            throw new PostNotExistException(postId);
-        }
-        return post.get();
-    }
+
 
     public void checkComment(int commentId){
         Optional<Comment> comment = commentRepository.findById(commentId);
@@ -46,30 +40,23 @@ public class CommentService {
         }
     }
 
-    public CommentDto saveComment(CommentDtoRequestBody newComment){
-        Optional<User> user = userRepository.findById(newComment.getUserId());
-        if (user.isEmpty()){
-            throw new UserNotExistException(newComment.getUserId());
-        }
-        checkPost(newComment.getPostId());
+    public CommentDto saveComment(NewCommentDto newComment){
+        User userFromDB = userRepository.findById(newComment.getUserId())
+                .orElseThrow(() -> new UserNotExistException(newComment.getUserId()));
 
-        Comment comment = new Comment();
+        Post postFromDB = postRepository.findById(newComment.getPostId())
+                .orElseThrow(() -> new PostNotExistException(newComment.getPostId()));
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        comment.setUser(user.get());
-        Post post = postRepository.getById(newComment.getPostId());
-        comment.setPost(post);
-        comment.setTime(dateTime);
-        comment.setComment(newComment.getComment());
+        Comment comment = commentMapper.dtoToComment(newComment);
+        var savedComment = commentRepository.save(comment);
 
-        commentRepository.save(comment);
-
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(savedComment);
     }
 
     public List<CommentDto> getCommentsByPostId(int postId){
-        Post post = checkPost(postId);
-        List<Comment> comments = commentRepository.findAllByPost(post);
+        Post postFromDB = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotExistException(postId));
+        List<Comment> comments = commentRepository.findAllByPost(postFromDB);
         return commentMapper.toCommentDtos(comments);
     }
 

@@ -1,17 +1,17 @@
 package facebookapi.business.service;
 
-import facebookapi.business.dto.SignUpDto;
+import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
-import facebookapi.domain.entity.User;
+import facebookapi.business.exceptions.LoginErrorException;
 import facebookapi.business.exceptions.UserAlreadyExistException;
 import facebookapi.business.exceptions.UserNotExistException;
+import facebookapi.business.exceptions.UsernameNotExistException;
 import facebookapi.business.mappers.UserMapper;
+import facebookapi.domain.entity.User;
 import facebookapi.domain.repository.UserRepository;
-import facebookapi.business.exceptions.LoginErrorException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,16 +24,14 @@ public class UserService {
     private final UserMapper userMapper;
 
 
-    public UserDto saveUser(SignUpDto userDto) {
+    public UserDto saveUser(NewUserDto userDto) {
         Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
-        if (userFromDB.isPresent()) {
+
+        if (userFromDB.isPresent()){
             throw new UserAlreadyExistException(userDto.getUserName());
         }
 
-        LocalDateTime dateTime = LocalDateTime.now();
         User newUser = userMapper.dtoToUser(userDto);
-        newUser.setActive(false);
-        newUser.setJoiningDate(dateTime);
 
         var savedUser = userRepository.save(newUser);
 
@@ -42,7 +40,7 @@ public class UserService {
 
     public List<UserDto> getAllUsersWithPosts() {
         List<User> users = userRepository.findAll();
-        return userMapper.toUserDtos(users);
+        return userMapper.toUsersDto(users);
     }
 
     public List<String> getUserNamesList() {
@@ -53,11 +51,11 @@ public class UserService {
     }
 
     public UserDto getUser(int userID) {
-        Optional<User> userFromDB = userRepository.findById(userID);
-        if (userFromDB.isEmpty()) {
-            throw new UserNotExistException(userID);
-        }
-        return userMapper.toUserDto(userFromDB.get());
+        User userFromDB = userRepository.findById(userID)
+                .orElseThrow(() -> new UserNotExistException(userID));
+
+
+        return userMapper.toUserDto(userFromDB);
 
     }
 
@@ -71,28 +69,29 @@ public class UserService {
     }
 
 
-    public UserDto login(SignUpDto userDto) {
-        Optional<User> userFromDb = userRepository.findByUserName(userDto.getUserName());
+    public UserDto login(NewUserDto userDto) {
+        User userFromDb = userRepository.findByUserName(userDto.getUserName())
+                .orElseThrow(() -> new UsernameNotExistException(userDto.getUserName()));
 
-        if (userFromDb.isEmpty() || wrongPassword(userFromDb.get(), userDto.getPassword())) {
+
+        if (wrongPassword(userFromDb, userDto.getPassword())) {
             throw new LoginErrorException();
         }
 
-        return userMapper.toUserDto(userFromDb.get());
+        return userMapper.toUserDto(userFromDb);
     }
 
     public boolean wrongPassword(User user, String password) {
         return !user.getPassword().equals(password);
     }
 
-    public List<UserDto> deleteUser(int userID) {
-        Optional<User> userFromDB = userRepository.findById(userID);
-        if (userFromDB.isEmpty()) {
-            throw new UserNotExistException(userID);
-        }
-        userRepository.deleteById(userID);
+    public String deleteUser(int userId) {
+        User userFromDB = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotExistException(userId));
 
-        return getAllUsersWithPosts();
+        userRepository.deleteById(userId);
+
+        return "Uzytkownik o numerze Id: " + userId + " zostal pomyslnie usuniety";
 
     }
 

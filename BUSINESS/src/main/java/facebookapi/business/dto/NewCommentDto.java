@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDtoRequestBody {
+public class NewCommentDto {
 
     private int userId;
     private int postId;

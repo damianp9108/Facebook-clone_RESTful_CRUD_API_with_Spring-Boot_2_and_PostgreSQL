@@ -1,23 +1,21 @@
 package facebookapi.business.service;
 
-import facebookapi.domain.entity.Post;
-import facebookapi.domain.entity.User;
-import facebookapi.business.mappers.PostMapper;
-import facebookapi.domain.repository.CommentRepository;
-import facebookapi.domain.repository.PostRepository;
-import facebookapi.domain.repository.UserRepository;
+import facebookapi.business.dto.NewPostDto;
+import facebookapi.business.dto.PostDto;
 import facebookapi.business.exceptions.PostException;
 import facebookapi.business.exceptions.PostNotExistException;
 import facebookapi.business.exceptions.UserNotExistException;
-import facebookapi.business.exceptions.UsernameNotExistException;
-import facebookapi.business.dto.PostDto;
 import facebookapi.business.mappers.CommentMapper;
+import facebookapi.business.mappers.PostMapper;
+import facebookapi.domain.entity.Post;
+import facebookapi.domain.entity.User;
+import facebookapi.domain.repository.CommentRepository;
+import facebookapi.domain.repository.PostRepository;
+import facebookapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,70 +29,58 @@ public class PostService {
     private final CommentMapper commentMapper;
 
 
-    public PostDto savePost(PostDto postDto) {
-        Optional<User> userFromDB = userRepository.findByUserName(postDto.getUserDto().getUserName());
-        if (userFromDB.isEmpty()) {
-            throw new UsernameNotExistException(postDto.getUserDto().getUserName());
-        }
+    public PostDto savePost(NewPostDto newPostDto) {
+        User userFromDB = userRepository.findById(newPostDto.getUserId())
+                .orElseThrow(() -> new UserNotExistException(newPostDto.getUserId()));
 
-        if ((postDto.getDescription() == null || postDto.getDescription().isBlank()) &&
-                (postDto.getPostImgURL() == null || postDto.getPostImgURL().isBlank())) {
+
+        if ((newPostDto.getDescription() == null || newPostDto.getDescription().isBlank()) &&
+                (newPostDto.getPostImgURL() == null || newPostDto.getPostImgURL().isBlank())) {
             throw new PostException();
         }
 
+        Post newPost = postMapper.dtoToPost(newPostDto);
 
-        LocalDateTime time = LocalDateTime.now();
+        var savedPost = postRepository.save(newPost);
 
-        Post newPost = postMapper.dtoToPost(postDto);
-        newPost.setUser(userFromDB.get());
-        newPost.setLikes(0);
-        newPost.setDateTime(time);
-
-        postRepository.save(newPost);
-
-        return postMapper.toPostDto(newPost);
+        return postMapper.toPostDto(savedPost);
 
     }
 
 
     public List<PostDto> getPosts() {
         List<Post> posts = postRepository.findAll();
-        return postMapper.toPostDtos(posts);
+        return postMapper.toPostsDto(posts);
     }
 
-    public List<PostDto> deletePost(int postID) {
-        Optional<Post> post = postRepository.findById(postID);
-        if (post.isEmpty()) {
-            throw new PostNotExistException(postID);
-        }
+    public String deletePost(int postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotExistException(postId));
+
 /*
         List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(postID);
         List<Comment> comments = commentMapper.dtosToComments(commentsToDelete);
         commentRepository.deleteAll(comments);
 */
 
-        postRepository.deleteById(postID);
+        postRepository.deleteById(postId);
 
-        return getPosts();
+        return "Post zostal pomyslnie usuniety";
     }
 
-    public List<PostDto> getUserPosts(int userID) {
-        Optional<User> userFromDB = userRepository.findById(userID);
-        if (userFromDB.isEmpty()) {
-            throw new UserNotExistException(userID);
-        }
+    public List<PostDto> getUserPosts(int userId) {
+        User userFromDB = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotExistException(userId));
 
-        List<Post> userPosts = postRepository.findByUser(userFromDB.get());
-        return postMapper.toPostDtos(userPosts);
+        List<Post> userPosts = postRepository.findByUser(userFromDB);
+        return postMapper.toPostsDto(userPosts);
     }
 
-    public List<PostDto> deleteUserPosts(int userID) {
-        Optional<User> userFromDB = userRepository.findById(userID);
-        if (userFromDB.isEmpty()) {
-            throw new UserNotExistException(userID);
-        }
+    public String deleteUserPosts(int userId) {
+        User userFromDB = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotExistException(userId));
 
-        List<Post> userPosts = postRepository.findByUser(userFromDB.get());
+        List<Post> userPosts = postRepository.findByUser(userFromDB);
 
         userPosts.forEach(post -> {
             // List<CommentDto> commentsToDelete = commentService.getCommentsByPostID(post.getPostID());
@@ -104,6 +90,6 @@ public class PostService {
             postRepository.delete(post);
         });
 
-        return getPosts();
+        return "Usunieto pomyslnie wszystkie posty uzytkownika o numerze Id: " + userId;
     }
 }

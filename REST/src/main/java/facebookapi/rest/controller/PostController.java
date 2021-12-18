@@ -1,5 +1,6 @@
 package facebookapi.rest.controller;
 
+import facebookapi.business.dto.NewPostDto;
 import facebookapi.business.dto.PostDto;
 import facebookapi.business.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class PostController {
 
 
     @PostMapping
-    public PostDto save(@RequestBody @Valid PostDto postDto) {
-        return postService.savePost(postDto);
+    public PostDto save(@RequestBody @Valid NewPostDto newPostDto) {
+        return postService.savePost(newPostDto);
     }
 
     @GetMapping
@@ -29,7 +30,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public List<PostDto> delete(@PathVariable("postId") int postId){
+    public String delete(@PathVariable("postId") int postId){
         return postService.deletePost(postId);
 
     }
@@ -40,7 +41,7 @@ public class PostController {
     }
 
     @DeleteMapping("/byUser/{userId}")
-    public List<PostDto> deleteByUserId (@PathVariable("userId") int userId){
+    public String deleteByUserId (@PathVariable("userId") int userId){
         return postService.deleteUserPosts(userId);
     }
 }

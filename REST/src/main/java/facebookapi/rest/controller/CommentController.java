@@ -1,7 +1,7 @@
 package facebookapi.rest.controller;
 
 import facebookapi.business.dto.CommentDto;
-import facebookapi.business.dto.CommentDtoRequestBody;
+import facebookapi.business.dto.NewCommentDto;
 import facebookapi.business.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public CommentDto save(@RequestBody @Valid CommentDtoRequestBody newComment){
+    public CommentDto save(@RequestBody @Valid NewCommentDto newComment){
         return commentService.saveComment(newComment);
     }
 

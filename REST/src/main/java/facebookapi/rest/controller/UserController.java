@@ -1,6 +1,6 @@
 package facebookapi.rest.controller;
 
-import facebookapi.business.dto.SignUpDto;
+import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
 import facebookapi.business.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto save(@RequestBody @Valid SignUpDto userDto) {
+    public UserDto save(@RequestBody @Valid NewUserDto userDto) {
          return userService.saveUser(userDto);
 
     }
@@ -45,12 +45,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDto login(@RequestBody @Valid SignUpDto userDto){
+    public UserDto login(@RequestBody @Valid NewUserDto userDto){
         return userService.login(userDto);
     }
 
     @DeleteMapping("/{userId}")
-    public List<UserDto> deleteUser(@PathVariable("userId") int userId){
+    public String deleteUser(@PathVariable("userId") int userId){
         return userService.deleteUser(userId);
     }
 }

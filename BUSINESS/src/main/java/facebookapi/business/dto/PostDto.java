@@ -14,8 +14,8 @@ public class PostDto {
     @JsonIgnoreProperties("postsDTO")
     private UserDto userDto;
 
-    public String description;
-    public String postImgURL;
+    private String description;
+    private String postImgURL;
     private int likes;
     private LocalDateTime dateTime;
 }
