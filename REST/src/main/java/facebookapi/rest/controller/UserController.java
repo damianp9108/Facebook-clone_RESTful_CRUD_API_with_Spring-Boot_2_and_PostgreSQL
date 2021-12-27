@@ -20,36 +20,43 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto save(@RequestBody @Valid NewUserDto userDto) {
          return userService.saveUser(userDto);
-
     }
+
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public UserDto login(@RequestBody @Valid NewUserDto userDto){
+        return userService.login(userDto);
+    }
+
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String update(@PathVariable("userId") int userId) {
+    public String setActivity(@PathVariable("userId") int userId) {
         return userService.changeActive(userId);
     }
+
 
     @GetMapping
     public List<UserDto> get() {
         return userService.getAllUsersWithPosts();
     }
 
+
     @GetMapping("/list")
     public List<String> getUserNamesList() {
         return userService.getUserNamesList();
     }
+
 
     @GetMapping("/{userId}")
     public UserDto getByUserId(@PathVariable("userId") int userId) {
         return userService.getUser(userId);
     }
 
-    @PostMapping("/login")
-    public UserDto login(@RequestBody @Valid NewUserDto userDto){
-        return userService.login(userDto);
-    }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String deleteUser(@PathVariable("userId") int userId){
         return userService.deleteUser(userId);
     }

@@ -23,16 +23,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-
     public UserDto saveUser(NewUserDto userDto) {
         Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
 
-        if (userFromDB.isPresent()){
+        if (userFromDB.isPresent()) {
             throw new UserAlreadyExistException(userDto.getUserName());
         }
 
         User newUser = userMapper.dtoToUser(userDto);
-
         var savedUser = userRepository.save(newUser);
 
         return userMapper.toUserDto(savedUser);
@@ -40,6 +38,7 @@ public class UserService {
 
     public List<UserDto> getAllUsersWithPosts() {
         List<User> users = userRepository.findAll();
+
         return userMapper.toUsersDto(users);
     }
 
@@ -47,13 +46,13 @@ public class UserService {
         List<String> userNamesList = userRepository.findAll().stream()
                 .map(User::getUserName)
                 .collect(Collectors.toList());
+
         return userNamesList;
     }
 
     public UserDto getUser(int userID) {
         User userFromDB = userRepository.findById(userID)
                 .orElseThrow(() -> new UserNotExistException(userID));
-
 
         return userMapper.toUserDto(userFromDB);
 
@@ -64,15 +63,14 @@ public class UserService {
         boolean activity = userToChangeActive.get().isActive();
         userToChangeActive.get().setActive(!activity);
         userRepository.save(userToChangeActive.get());
+
         return "active: " + userToChangeActive.get().isActive();
 
     }
 
-
     public UserDto login(NewUserDto userDto) {
         User userFromDb = userRepository.findByUserName(userDto.getUserName())
                 .orElseThrow(() -> new UsernameNotExistException(userDto.getUserName()));
-
 
         if (wrongPassword(userFromDb, userDto.getPassword())) {
             throw new LoginErrorException();

@@ -1,8 +1,8 @@
 package facebookapi.business.mappers;
 
 import facebookapi.business.dto.NewPostDto;
-import facebookapi.domain.entity.Post;
 import facebookapi.business.dto.PostDto;
+import facebookapi.domain.entity.Post;
 import facebookapi.domain.entity.User;
 import facebookapi.domain.repository.UserRepository;
 import org.mapstruct.*;
@@ -53,4 +53,7 @@ public abstract class PostMapper {
     public abstract List<PostDto> toPostsDto(List<Post> posts);
 
     public abstract List<Post> dtoToPosts(List<PostDto> postsDTO);
+
+    @Mapping(source = "userDto", target = "user")
+    public abstract Post dtoToPost(PostDto postDto);
 }

@@ -17,7 +17,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)             // cascade = CascadeType.ALL
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
@@ -25,10 +25,7 @@ public class Comment {
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
 
-    //@Column(name = "comment")
     private String comment;
-
-    //@Column(name = "time")
     private LocalDateTime time;
 
 }

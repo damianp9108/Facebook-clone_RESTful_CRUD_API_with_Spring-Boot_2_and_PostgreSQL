@@ -1,20 +1,16 @@
 package facebookapi.business;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class ValidationError {
+
     private String fieldName;
     private String message;
-
-    public ValidationError(String fieldName, String message) {
-        this.fieldName = fieldName;
-        this.message = message;
-    }
-
-    public ValidationError() {
-    }
-
 
 }
 

@@ -4,7 +4,9 @@ import facebookapi.business.dto.CommentDto;
 import facebookapi.business.dto.NewCommentDto;
 import facebookapi.business.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -16,32 +18,40 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public CommentDto save(@RequestBody @Valid NewCommentDto newComment){
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto save(@RequestBody @Valid NewCommentDto newComment) {
         return commentService.saveComment(newComment);
     }
 
+
     @GetMapping("/{postId}")
-    public List<CommentDto> getByPostId(@PathVariable ("postId") int postId){
+    public List<CommentDto> getByPostId(@PathVariable("postId") int postId) {
         return commentService.getCommentsByPostId(postId);
     }
 
+
     @GetMapping
-    public List<CommentDto> get(){
+    public List<CommentDto> get() {
         return commentService.getAllComments();
     }
 
-    @DeleteMapping("/{commentId}")
-    public List<CommentDto> delete(@PathVariable("commentId") int commentId){
-        return commentService.deleteComment(commentId);
-    }
 
     @GetMapping("/byUser/{userId}")
-    public List<CommentDto> getByUserId (@PathVariable("userId") int userId){
+    public List<CommentDto> getByUserId(@PathVariable("userId") int userId) {
         return commentService.getCommentsByUserId(userId);
     }
 
+
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public String delete(@PathVariable("commentId") int commentId) {
+        return commentService.deleteComment(commentId);
+    }
+
+
     @DeleteMapping("/byUser/{userId}")
-    public List<CommentDto> deleteByUserId (@PathVariable("userId") int userId){
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public String deleteByUserId(@PathVariable("userId") int userId) {
         return commentService.deleteCommentsByUserId(userId);
     }
 

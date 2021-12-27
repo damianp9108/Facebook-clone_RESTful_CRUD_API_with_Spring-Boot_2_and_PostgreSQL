@@ -1,18 +1,22 @@
 package facebookapi.business.dto;
 
-import lombok.*;
-
-import javax.validation.constraints.Pattern;
+import facebookapi.business.annotations.Password;
+import facebookapi.business.annotations.UserName;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewUserDto {
-    @Pattern(regexp = "^((?!.*[\\s]).{4,14})", message = "nazwa uzytkownia musi zawierac 4-14 znakow, spacja niedozwolona")
+
+    @UserName
     private String userName;
 
-    @Pattern(regexp = "^((?!.*[\\s]).{5,16})", message = "Haslo musi zawierac 5-16 znakow, spacja niedozwolona")
+    @Password
     private String password;
 
     private String userImage;

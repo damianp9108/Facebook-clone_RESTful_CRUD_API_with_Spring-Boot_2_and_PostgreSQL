@@ -1,9 +1,12 @@
 package facebookapi.business.mappers;
 
-import facebookapi.domain.entity.User;
 import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
-import org.mapstruct.*;
+import facebookapi.domain.entity.User;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,17 +24,15 @@ public abstract class UserMapper {
     public abstract User dtoToUser(NewUserDto userDto);
 
     @AfterMapping
-    void setActiveForUser (@MappingTarget User user){
+    void setActiveForUser(@MappingTarget User user) {
         user.setActive(false);
     }
 
     @AfterMapping
-    void setJoiningDateForUser (@MappingTarget User user){
+    void setJoiningDateForUser(@MappingTarget User user) {
         LocalDateTime time = LocalDateTime.now();
         user.setJoiningDate(time);
     }
 
-    @Mapping(source = "postsDTO", target = "posts")
-    public abstract User dtoToUser(UserDto userDto);
 
 }

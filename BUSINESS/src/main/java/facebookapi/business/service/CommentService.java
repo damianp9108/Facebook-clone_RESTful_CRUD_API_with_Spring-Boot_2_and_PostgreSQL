@@ -1,51 +1,29 @@
 package facebookapi.business.service;
 
+import facebookapi.business.IdChecker;
 import facebookapi.business.dto.CommentDto;
 import facebookapi.business.dto.NewCommentDto;
-import facebookapi.business.exceptions.CommentNotExistException;
-import facebookapi.business.exceptions.PostNotExistException;
-import facebookapi.business.exceptions.UserNotExistException;
 import facebookapi.business.mappers.CommentMapper;
-import facebookapi.business.mappers.UserMapper;
 import facebookapi.domain.entity.Comment;
 import facebookapi.domain.entity.Post;
 import facebookapi.domain.entity.User;
 import facebookapi.domain.repository.CommentRepository;
-import facebookapi.domain.repository.PostRepository;
-import facebookapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final UserService userService;
-    private final UserRepository userRepository;
     private final CommentMapper commentMapper;
-    private final UserMapper userMapper;
+    private final IdChecker idChecker;
 
-
-
-    public void checkComment(int commentId){
-        Optional<Comment> comment = commentRepository.findById(commentId);
-        if (comment.isEmpty()){
-            throw new CommentNotExistException(commentId);
-        }
-    }
-
-    public CommentDto saveComment(NewCommentDto newComment){
-        User userFromDB = userRepository.findById(newComment.getUserId())
-                .orElseThrow(() -> new UserNotExistException(newComment.getUserId()));
-
-        Post postFromDB = postRepository.findById(newComment.getPostId())
-                .orElseThrow(() -> new PostNotExistException(newComment.getPostId()));
+    public CommentDto saveComment(NewCommentDto newComment) {
+        idChecker.isUserAvailable(newComment.getUserId());
+        idChecker.isPostAvailable(newComment.getPostId());
 
         Comment comment = commentMapper.dtoToComment(newComment);
         var savedComment = commentRepository.save(comment);
@@ -53,45 +31,42 @@ public class CommentService {
         return commentMapper.toCommentDto(savedComment);
     }
 
-    public List<CommentDto> getCommentsByPostId(int postId){
-        Post postFromDB = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotExistException(postId));
-        List<Comment> comments = commentRepository.findAllByPost(postFromDB);
-        return commentMapper.toCommentDtos(comments);
+    public List<CommentDto> getCommentsByPostId(int postId) {
+        Post postAvailable = idChecker.isPostAvailable(postId);
+        List<Comment> comments = commentRepository.findAllByPost(postAvailable);
+
+        return commentMapper.toCommentsDto(comments);
     }
 
-    public List<CommentDto> getAllComments(){
+    public List<CommentDto> getAllComments() {
         List<Comment> comments = commentRepository.findAll();
-        List<CommentDto> commentDtos = commentMapper.toCommentDtos(comments);
-        return commentDtos;
+        List<CommentDto> commentsDto = commentMapper.toCommentsDto(comments);
+
+        return commentsDto;
     }
 
-    public List<CommentDto> deleteComment(int commentId){
-        checkComment(commentId);
+    public String deleteComment(int commentId) {
+        idChecker.isCommentAvailable(commentId);
         commentRepository.deleteById(commentId);
-        return getAllComments();
+
+        return "Komentarz o numerze Id: " + commentId + " zostal pomyslnie usuniety.";
     }
 
-    public List<CommentDto> getCommentsByUserId (int userId){
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new UserNotExistException(userId);
-        }
+    public List<CommentDto> getCommentsByUserId(int userId) {
+        User userAvailable = idChecker.isUserAvailable(userId);
 
-        List<Comment> userComments = commentRepository.findAllByUser(user.get());
-        List<CommentDto> commentDtos = commentMapper.toCommentDtos(userComments);
-        return commentDtos;
+        List<Comment> userComments = commentRepository.findAllByUser(userAvailable);
+        List<CommentDto> commentsDto = commentMapper.toCommentsDto(userComments);
+
+        return commentsDto;
     }
 
-    public List<CommentDto> deleteCommentsByUserId (int userId){
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new UserNotExistException(userId);
-        }
-
-        List<Comment> userComments = commentRepository.findAllByUser(user.get());
+    public String deleteCommentsByUserId(int userId) {
+        User userAvailable = idChecker.isUserAvailable(userId);
+        List<Comment> userComments = commentRepository.findAllByUser(userAvailable);
         commentRepository.deleteAll(userComments);
-        return getAllComments();
+
+        return "Usunieto wszystkie komentarze dodane przez uzytkownika o numerze Id: " + userId;
     }
 
 

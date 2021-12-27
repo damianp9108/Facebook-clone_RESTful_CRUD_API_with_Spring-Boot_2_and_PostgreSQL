@@ -1,6 +1,9 @@
 package facebookapi.domain.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +19,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "userId")
     private int userId;
 
     private String userName;
@@ -31,11 +33,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    public User(String userName, String password, String userImage) {
-        this.userName = userName;
-        this.password = password;
-        this.userImage = userImage;
-    }
 }
 
 

@@ -2,6 +2,6 @@ package facebookapi.business.exceptions;
 
 public class LoginErrorException extends RuntimeException {
     public LoginErrorException() {
-        super("niepoprawne haslo");
+        super("Niepoprawne haslo");
     }
 }

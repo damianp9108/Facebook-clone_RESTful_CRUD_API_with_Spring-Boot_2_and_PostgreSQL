@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @Mapper(componentModel = "spring", uses = PostMapper.class)
-public abstract class CommentMapper{
+public abstract class CommentMapper {
 
     @Autowired
     protected PostRepository postRepository;
@@ -27,40 +27,28 @@ public abstract class CommentMapper{
     public abstract Comment dtoToComment(NewCommentDto newCommentDto);
 
     @AfterMapping
-    void setTime(@MappingTarget Comment comment){
+    void setTime(@MappingTarget Comment comment) {
         LocalDateTime time = LocalDateTime.now();
         comment.setTime(time);
     }
 
-  /*  @Named("userIdToUser")
-    public User setUser(int userId){
-        Optional<User> user = userRepository.findById(userId);
-
-        return user.get();
-    } */
 
     @Named("postIdToPost")
-    protected Post setPost(int postId){
+    protected Post setPost(int postId) {
         Optional<Post> post = postRepository.findById(postId);
 
         return post.get();
     }
 
 
-
     @Mapping(source = "user", target = "userDto")
     @Mapping(source = "post", target = "postDto")
     public abstract CommentDto toCommentDto(Comment comment);
 
-    public abstract List<CommentDto> toCommentDtos(List<Comment> comments);
+    public abstract List<CommentDto> toCommentsDto(List<Comment> comments);
+
     public abstract UserDto userToUserDto(User user);
 
 
-
-
-
-
-
-
-    }
+}
 

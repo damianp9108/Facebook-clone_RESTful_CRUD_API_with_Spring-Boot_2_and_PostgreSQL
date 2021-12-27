@@ -14,7 +14,7 @@ public class NewCommentDto {
     private int userId;
     private int postId;
 
-    @NotBlank(message = "komentarz nie moze byc pusty")
-    @Length(max = 300, message = "komentarz jest za dlugi")
+    @NotBlank(message = "Komentarz nie moze byc pusty")
+    @Length(max = 300, message = "Komentarz jest za dlugi")
     private String comment;
 }

@@ -16,7 +16,6 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "postId")
     private int postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,16 +25,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    //@Column(name = "description")
     private String description;
-
-    //@Column(name = "postImgURL")
     private String postImgURL;
-
-    //@Column(name = "likes")
     private int likes;
-
-    //@Column(name = "dateTime")
     private LocalDateTime dateTime;
 
 }
