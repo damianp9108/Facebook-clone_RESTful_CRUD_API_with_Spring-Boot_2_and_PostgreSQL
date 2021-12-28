@@ -1,10 +1,10 @@
 package facebookapi.business.service;
 
+import facebookapi.business.IdChecker;
 import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
 import facebookapi.business.exceptions.LoginErrorException;
 import facebookapi.business.exceptions.UserAlreadyExistException;
-import facebookapi.business.exceptions.UserNotExistException;
 import facebookapi.business.exceptions.UsernameNotExistException;
 import facebookapi.business.mappers.UserMapper;
 import facebookapi.domain.entity.User;
@@ -22,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final IdChecker idChecker;
 
     public UserDto saveUser(NewUserDto userDto) {
         Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
@@ -50,21 +51,20 @@ public class UserService {
         return userNamesList;
     }
 
-    public UserDto getUser(int userID) {
-        User userFromDB = userRepository.findById(userID)
-                .orElseThrow(() -> new UserNotExistException(userID));
+    public UserDto getUser(int userId) {
+        User user = idChecker.isUserAvailable(userId);
 
-        return userMapper.toUserDto(userFromDB);
+        return userMapper.toUserDto(user);
 
     }
 
-    public String changeActive(int userID) {
-        Optional<User> userToChangeActive = userRepository.findById(userID);
-        boolean activity = userToChangeActive.get().isActive();
-        userToChangeActive.get().setActive(!activity);
-        userRepository.save(userToChangeActive.get());
+    public String changeActive(int userId) {
+        User user = idChecker.isUserAvailable(userId);
+        boolean activity = user.isActive();
+        user.setActive(!activity);
+        userRepository.save(user);
 
-        return "active: " + userToChangeActive.get().isActive();
+        return "active: " + user.isActive();
 
     }
 
@@ -84,9 +84,7 @@ public class UserService {
     }
 
     public String deleteUser(int userId) {
-        User userFromDB = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotExistException(userId));
-
+        idChecker.isUserAvailable(userId);
         userRepository.deleteById(userId);
 
         return "Uzytkownik o numerze Id: " + userId + " zostal pomyslnie usuniety";
