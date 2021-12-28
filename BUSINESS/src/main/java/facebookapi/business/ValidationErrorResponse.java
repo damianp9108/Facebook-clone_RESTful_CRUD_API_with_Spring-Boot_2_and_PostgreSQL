@@ -11,11 +11,20 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 public class ValidationErrorResponse {
-    private List<ValidationError> errors = new ArrayList<>();
+    private List<ValidationFieldError> fieldErrors = new ArrayList<>();
+    private ArrayList<ValidationObjectError> objectErrors = new ArrayList<>();
 
-    public ValidationErrorResponse addError(ValidationError error) {
-        this.errors.add(error);
+
+    public ValidationErrorResponse addFieldError(ValidationFieldError error) {
+        this.fieldErrors.add(error);
 
         return this;
     }
+
+    public ValidationErrorResponse addObjectError(ValidationObjectError error){
+        this.objectErrors.add(error);
+
+        return this;
+    }
+
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ValidationError {
+public class ValidationFieldError {
 
     private String fieldName;
     private String message;

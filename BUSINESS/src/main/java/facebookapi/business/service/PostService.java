@@ -3,7 +3,6 @@ package facebookapi.business.service;
 import facebookapi.business.IdChecker;
 import facebookapi.business.dto.NewPostDto;
 import facebookapi.business.dto.PostDto;
-import facebookapi.business.exceptions.PostException;
 import facebookapi.business.mappers.PostMapper;
 import facebookapi.domain.entity.Post;
 import facebookapi.domain.entity.User;
@@ -24,10 +23,10 @@ public class PostService {
     public PostDto savePost(NewPostDto newPostDto) {
         idChecker.isUserAvailable(newPostDto.getUserId());
 
-        if ((newPostDto.getDescription() == null || newPostDto.getDescription().isBlank()) &&
+       /* if ((newPostDto.getDescription() == null || newPostDto.getDescription().isBlank()) &&
                 (newPostDto.getPostImgURL() == null || newPostDto.getPostImgURL().isBlank())) {
             throw new PostException();
-        }
+        } */
 
         Post newPost = postMapper.dtoToPost(newPostDto);
         var savedPost = postRepository.save(newPost);
