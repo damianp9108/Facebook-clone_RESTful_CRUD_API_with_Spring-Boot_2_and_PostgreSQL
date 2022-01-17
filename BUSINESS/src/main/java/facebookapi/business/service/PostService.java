@@ -23,10 +23,6 @@ public class PostService {
     public PostDto savePost(NewPostDto newPostDto) {
         idChecker.isUserAvailable(newPostDto.getUserId());
 
-       /* if ((newPostDto.getDescription() == null || newPostDto.getDescription().isBlank()) &&
-                (newPostDto.getPostImgURL() == null || newPostDto.getPostImgURL().isBlank())) {
-            throw new PostException();
-        } */
 
         Post newPost = postMapper.dtoToPost(newPostDto);
         var savedPost = postRepository.save(newPost);

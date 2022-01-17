@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Comments")
+@Table(name = "comments")
 @Getter
 @Setter
 @AllArgsConstructor

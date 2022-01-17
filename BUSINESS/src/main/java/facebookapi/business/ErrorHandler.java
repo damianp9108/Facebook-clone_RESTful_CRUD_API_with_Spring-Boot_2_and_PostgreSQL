@@ -105,13 +105,7 @@ public class ErrorHandler {
 
         return response;
     }
-/*
-    @ExceptionHandler(PostException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String postExceptionHandler(PostException ex) {
-        return ex.getMessage();
-    }
-*/
+
     @ExceptionHandler(PostNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String postNotExistHandler(PostNotExistException ex) {
