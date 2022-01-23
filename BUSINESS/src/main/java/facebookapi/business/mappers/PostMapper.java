@@ -1,37 +1,43 @@
 package facebookapi.business.mappers;
 
-import facebookapi.business.dto.NewPostDto;
 import facebookapi.business.dto.PostDto;
+import facebookapi.business.payload.request.NewPostRequest;
+import facebookapi.business.service.UserService;
 import facebookapi.domain.entity.Post;
 import facebookapi.domain.entity.User;
 import facebookapi.domain.repository.UserRepository;
+import org.aspectj.lang.annotation.After;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class )
 public abstract class PostMapper {
 
     @Autowired
     protected UserRepository userRepository;
+    @Autowired
+    protected UserService userService;
+
 
     @Mapping(source = "user", target = "userDto")
     public abstract PostDto toPostDto(Post post);
 
-    @Mapping(source = "userId", target = "user", qualifiedByName = "userIdToUser")
+
+
+    @Mapping(ignore = true, target = "user")
     @Mapping(ignore = true, target = "dateTime")
     @Mapping(ignore = true, target = "likes")
     @Mapping(ignore = true, target = "comments")
-    public abstract Post dtoToPost(NewPostDto newPostDto);
+    public abstract Post toPost(NewPostRequest newPostRequest);
 
-    @Named("userIdToUser")
-    protected User setUser(int userId) {
-        Optional<User> user = userRepository.findById(userId);
-
-        return user.get();
+    @AfterMapping
+    void setUser(@MappingTarget Post post) {
+        int userId = userService.retrieveCurrentlyAuthenticatedUserId();
+        User user = userRepository.findById(userId).get();
+        post.setUser(user);
     }
 
     @AfterMapping
@@ -52,8 +58,5 @@ public abstract class PostMapper {
 
     public abstract List<PostDto> toPostsDto(List<Post> posts);
 
-    public abstract List<Post> dtoToPosts(List<PostDto> postsDTO);
 
-    @Mapping(source = "userDto", target = "user")
-    public abstract Post dtoToPost(PostDto postDto);
 }

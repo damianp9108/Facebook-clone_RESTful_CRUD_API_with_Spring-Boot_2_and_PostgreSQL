@@ -1,4 +1,4 @@
-package facebookapi.business.dto;
+package facebookapi.business.payload.request;
 
 import facebookapi.business.annotations.NotNullPost;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @NotNullPost
-public class NewPostDto {
+public class NewPostRequest {
 
-    private int userId;
     private String description;
     private String postImgURL;
 }

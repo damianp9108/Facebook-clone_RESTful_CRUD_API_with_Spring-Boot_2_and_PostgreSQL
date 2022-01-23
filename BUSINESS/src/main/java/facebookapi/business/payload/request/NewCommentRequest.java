@@ -1,4 +1,4 @@
-package facebookapi.business.dto;
+package facebookapi.business.payload.request;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -9,9 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewCommentDto {
+public class NewCommentRequest {
 
-    private int userId;
     private int postId;
 
     @NotBlank(message = "Komentarz nie moze byc pusty")

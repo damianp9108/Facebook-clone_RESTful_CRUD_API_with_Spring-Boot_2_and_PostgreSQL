@@ -1,8 +1,5 @@
 package facebookapi.business;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import facebookapi.business.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -19,31 +16,39 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(UserAlreadyExistException.class)
+    @ExceptionHandler(UsernameAlreadyExistException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    public String recordAlreadyExistsHandler(UserAlreadyExistException ex) {
+    public String usernameErrorHandler(UsernameAlreadyExistException ex) {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(LoginErrorException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String loginErrorExceptionHandler(LoginErrorException ex) {
+    @ExceptionHandler(EmailAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    public String emailErrorHandler(EmailAlreadyExistException ex) {
         return ex.getMessage();
     }
+
 
     @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String userNotExistHandler(UserNotExistException ex) {
+    public String userErrorHandler(UserNotExistException ex) {
         return ex.getMessage();
     }
 
     @ExceptionHandler(UsernameNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String usernameNotExistHandler(UsernameNotExistException ex) {
+    public String usernameNotExistErrorHandler(UsernameNotExistException ex) {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(InvalidFormatException.class)
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String roleNotFoundExceptionHandler(RoleNotFoundException ex){
+        return ex.getMessage();
+    }
+
+  /*  @ExceptionHandler(InvalidFormatException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ValidationErrorResponse invalidFormatExceptionHandler(InvalidFormatException ex) {
         ValidationErrorResponse response = new ValidationErrorResponse();
@@ -64,11 +69,11 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         return "Nieprawidlowy format danych";
-    }
+    } */
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationErrorResponse validationError(MethodArgumentNotValidException exception) {
+    public ValidationErrorResponse validationErrorHandler(MethodArgumentNotValidException exception) {
         ValidationErrorResponse response = new ValidationErrorResponse();
 
         if (exception.hasFieldErrors()) {
@@ -93,7 +98,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationErrorResponse validationError(ConstraintViolationException exception) {
+    public ValidationErrorResponse validationErrorHandler(ConstraintViolationException exception) {
         ValidationErrorResponse response = new ValidationErrorResponse();
 
         for (ConstraintViolation error : exception.getConstraintViolations()) {
@@ -108,13 +113,13 @@ public class ErrorHandler {
 
     @ExceptionHandler(PostNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String postNotExistHandler(PostNotExistException ex) {
+    public String postErrorHandler(PostNotExistException ex) {
         return ex.getMessage();
     }
 
     @ExceptionHandler(CommentNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String commentNotExistExceptionHandler(CommentNotExistException ex) {
+    public String commentErrorHandler(CommentNotExistException ex) {
         return ex.getMessage();
     }
 }

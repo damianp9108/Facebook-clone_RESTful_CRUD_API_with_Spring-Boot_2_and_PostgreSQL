@@ -1,7 +1,12 @@
 package facebookapi.business.payload.request;
 
+import facebookapi.business.annotations.Password;
+import facebookapi.business.annotations.UserName;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,22 +15,25 @@ import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Component
 public class SignupRequest {
 
-    @NotBlank
-    @Size(min = 3, max = 20)
-    private String username;
+    @UserName
+    private String userName;
 
     @NotBlank
     @Size(max = 50)
     @Email
     private String email;
 
-    private Set<String> role;
+   // private Set<String> role;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @Password
     private String password;
+
+    private String userImageURL;
 
 
 

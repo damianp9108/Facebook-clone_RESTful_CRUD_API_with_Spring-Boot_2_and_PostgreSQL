@@ -24,21 +24,21 @@ public class IdChecker {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public Comment isCommentAvailable(int commentId) {
+    public Comment checkCommentAvailable(int commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotExistException(commentId));
 
         return comment;
     }
 
-    public User isUserAvailable(int userId) {
+    public User checkUserAvailable(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException(userId));
 
         return user;
     }
 
-    public Post isPostAvailable(int postId) {
+    public Post checkPostAvailable(int postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotExistException(postId));
 

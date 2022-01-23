@@ -1,7 +1,7 @@
 package facebookapi.rest.controller;
 
-import facebookapi.business.dto.NewPostDto;
 import facebookapi.business.dto.PostDto;
+import facebookapi.business.payload.request.NewPostRequest;
 import facebookapi.business.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostDto save(@RequestBody @Valid NewPostDto newPostDto) {
-        return postService.savePost(newPostDto);
+    public PostDto save(@RequestBody @Valid NewPostRequest newPostRequest) {
+        return postService.savePost(newPostRequest);
     }
 
 
@@ -38,15 +38,15 @@ public class PostController {
 
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String delete(@PathVariable("postId") int postId) {
+    public String deletePost(@PathVariable("postId") int postId) {
         return postService.deletePost(postId);
 
     }
 
 
-    @DeleteMapping("/byUser/{userId}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String deleteByUserId(@PathVariable("userId") int userId) {
-        return postService.deleteUserPosts(userId);
+    public String deleteUserPosts() {
+        return postService.deleteUserPosts();
     }
 }

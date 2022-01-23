@@ -1,19 +1,26 @@
 package facebookapi.business.service;
 
 import facebookapi.business.IdChecker;
-import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
-import facebookapi.business.exceptions.LoginErrorException;
-import facebookapi.business.exceptions.UserAlreadyExistException;
-import facebookapi.business.exceptions.UsernameNotExistException;
+import facebookapi.business.exceptions.EmailAlreadyExistException;
+import facebookapi.business.exceptions.UsernameAlreadyExistException;
 import facebookapi.business.mappers.UserMapper;
+import facebookapi.business.payload.request.LoginRequest;
+import facebookapi.business.payload.request.SignupRequest;
+import facebookapi.business.payload.response.JwtResponse;
+import facebookapi.business.security.jwt.JwtUtils;
+import facebookapi.business.security.services.UserDetailsImpl;
 import facebookapi.domain.entity.User;
 import facebookapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,19 +30,46 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final IdChecker idChecker;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
-    public UserDto saveUser(NewUserDto userDto) {
-        Optional<User> userFromDB = userRepository.findByUserName(userDto.getUserName());
 
-        if (userFromDB.isPresent()) {
-            throw new UserAlreadyExistException(userDto.getUserName());
+    public String saveUser(SignupRequest signupRequest) {
+        if (userRepository.existsByUserName(signupRequest.getUserName())) {
+            throw new UsernameAlreadyExistException(signupRequest.getUserName());
         }
 
-        User newUser = userMapper.dtoToUser(userDto);
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            throw new EmailAlreadyExistException(signupRequest.getEmail());
+        }
+
+        User newUser = userMapper.dtoToUser(signupRequest);
         var savedUser = userRepository.save(newUser);
 
-        return userMapper.toUserDto(savedUser);
+        return "Uzytkownik zarejestrowany pomyslnie!";
     }
+
+
+    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getUserId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles));
+    }
+
 
     public List<UserDto> getAllUsersWithPosts() {
         List<User> users = userRepository.findAll();
@@ -52,43 +86,17 @@ public class UserService {
     }
 
     public UserDto getUser(int userId) {
-        User user = idChecker.isUserAvailable(userId);
+        User user = idChecker.checkUserAvailable(userId);
 
         return userMapper.toUserDto(user);
 
     }
 
-    public String changeActive(int userId) {
-        User user = idChecker.isUserAvailable(userId);
-        boolean activity = user.isActive();
-        user.setActive(!activity);
-        userRepository.save(user);
+    public int retrieveCurrentlyAuthenticatedUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return "active: " + user.isActive();
-
-    }
-
-    public UserDto login(NewUserDto userDto) {
-        User userFromDb = userRepository.findByUserName(userDto.getUserName())
-                .orElseThrow(() -> new UsernameNotExistException(userDto.getUserName()));
-
-        if (wrongPassword(userFromDb, userDto.getPassword())) {
-            throw new LoginErrorException();
-        }
-
-        return userMapper.toUserDto(userFromDb);
-    }
-
-    public boolean wrongPassword(User user, String password) {
-        return !user.getPassword().equals(password);
-    }
-
-    public String deleteUser(int userId) {
-        idChecker.isUserAvailable(userId);
-        userRepository.deleteById(userId);
-
-        return "Uzytkownik o numerze Id: " + userId + " zostal pomyslnie usuniety";
-
+        return userDetails.getUserId();
     }
 
 }

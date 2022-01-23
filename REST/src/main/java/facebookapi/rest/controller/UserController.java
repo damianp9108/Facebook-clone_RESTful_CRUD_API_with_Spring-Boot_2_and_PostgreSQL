@@ -1,12 +1,13 @@
 package facebookapi.rest.controller;
 
-import facebookapi.business.dto.NewUserDto;
 import facebookapi.business.dto.UserDto;
 import facebookapi.business.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
@@ -15,26 +16,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto save(@RequestBody @Valid NewUserDto userDto) {
-         return userService.saveUser(userDto);
-    }
-
-
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public UserDto login(@RequestBody @Valid NewUserDto userDto){
-        return userService.login(userDto);
-    }
-
-
-    @PutMapping("/{userId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public String setActivity(@PathVariable("userId") int userId) {
-        return userService.changeActive(userId);
-    }
 
 
     @GetMapping
@@ -55,9 +36,4 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public String deleteUser(@PathVariable("userId") int userId){
-        return userService.deleteUser(userId);
-    }
 }

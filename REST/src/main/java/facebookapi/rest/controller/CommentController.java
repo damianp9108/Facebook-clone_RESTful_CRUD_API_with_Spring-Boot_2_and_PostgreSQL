@@ -1,7 +1,7 @@
 package facebookapi.rest.controller;
 
 import facebookapi.business.dto.CommentDto;
-import facebookapi.business.dto.NewCommentDto;
+import facebookapi.business.payload.request.NewCommentRequest;
 import facebookapi.business.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto save(@RequestBody @Valid NewCommentDto newComment) {
+    public CommentDto save(@RequestBody @Valid NewCommentRequest newComment) {
         return commentService.saveComment(newComment);
     }
 
@@ -49,10 +49,10 @@ public class CommentController {
     }
 
 
-    @DeleteMapping("/byUser/{userId}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String deleteByUserId(@PathVariable("userId") int userId) {
-        return commentService.deleteCommentsByUserId(userId);
+    public String deleteUserComments() {
+        return commentService.deleteUserComments();
     }
 
 }

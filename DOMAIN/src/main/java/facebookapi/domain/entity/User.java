@@ -26,8 +26,8 @@ public class User {
     private String userName;
     private String password;
     private String email;
-    private String userImage;
-    private boolean active;
+    private String userImageURL;
+   // private boolean active;
     private LocalDateTime joiningDate;
 
 
@@ -46,10 +46,11 @@ public class User {
 
 
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String userImageURL) {
         this.userName = username;
         this.email = email;
         this.password = password;
+        this.userImageURL = userImageURL;
     }
 
 }
