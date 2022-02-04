@@ -16,3 +16,5 @@ This is the multi-modules maven project.
 - Swagger UI
 - Git
 - Maven
+- Postman
+- IntelliJ IDEA
