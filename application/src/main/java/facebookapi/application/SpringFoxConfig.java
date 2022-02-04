@@ -31,8 +31,11 @@ public class SpringFoxConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "My facebook-clone REST API",
-                "Simple clone of Facebook with basic functions.",
+                "Facebook-clone API Documentation",
+                "The simple clone of Facebook with basic functions like:\n" +
+                        "- signUp, signIn USERS\n" +
+                        "- post, get, delete POSTS and COMMENTS\n" +
+                        "- another methods available for Administrator Role.\n",
                 "1.0",
                 "Terms of service",
                 new Contact("Damian Pyda", "", "damianp91@gmail.com"),
