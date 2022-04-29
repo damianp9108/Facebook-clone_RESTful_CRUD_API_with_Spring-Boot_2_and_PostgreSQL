@@ -13,6 +13,8 @@ This is the multi-modules maven project.
 - PostgreSQL database
 - Spring Data JPA with Hibernate
 - MapStruct with Project Lombock
-- Swagger UI
+- Swagger
 - Git
 - Maven
+- Postman
+- IntelliJ IDEA
