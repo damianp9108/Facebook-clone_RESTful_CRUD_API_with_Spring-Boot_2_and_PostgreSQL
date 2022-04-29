@@ -11,6 +11,7 @@ import facebookapi.domain.repository.CommentRepository;
 import facebookapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class CommentService {
             return "Error: Mozesz usunac tylko swoj komentarz!";
     }
 
-    public List<CommentDto> getCommentsByUserId(int userId) {
+    public List<CommentDto> getCommentsByUserId(int userId){
         User userAvailable = idChecker.checkUserAvailable(userId);
 
         List<Comment> userComments = commentRepository.findAllByUser(userAvailable);

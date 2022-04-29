@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,7 +45,7 @@ public class CommentController {
 
     @GetMapping("/byUser/{userId}")
     @ApiOperation(value = "", authorizations = { @Authorization(value = "JWT") })
-    public List<CommentDto> getByUserId(@PathVariable("userId") int userId) {
+    public List<CommentDto> getByUserId(@PathVariable("userId") int userId){
         return commentService.getCommentsByUserId(userId);
     }
 
